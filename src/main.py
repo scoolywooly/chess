@@ -54,7 +54,7 @@ while True:
         allow_quit()
 
         if event.type == pygame.MOUSEBUTTONDOWN: # When we click the mouse
-            get_action(mouse_clicks)
+            chess_board = get_action(mouse_clicks)
             
 
         
