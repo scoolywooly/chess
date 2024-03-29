@@ -192,16 +192,25 @@ def place_piece(board=[
 
     return updated_chess_board
 
-def get_action(mouse_clicks):
+def get_action(mouse_clicks, board=[
+    ["br","bn","bb","bq","bk","bb","bn","br"],
+    ["bp","bp","bp","bp","bp","bp","bp","bp"],
+    ["_","_","_","_","_","_","_","_",],
+    ["_","_","_","_","_","_","_","_",],
+    ["_","_","_","_","_","_","_","_",],
+    ["_","_","_","_","_","_","_","_",],
+    ["wp","wp","wp","wp","wp","wp","wp","wp"],
+    ["wr","wn","wb","wq","wk","wb","wn","wr"]
+    ]):
     # If the mouse clicks is even then we pick up a piece
     # If the mouse clicks is odd, then we place a piece
 
     if mouse_clicks % 2 == 0: # If Even
         can_pick_up = True
-        chess_board = pick_up_piece()
+        chess_board = pick_up_piece(board)
     else:
         can_pick_up = False
-        chess_board = place_piece()
+        chess_board = place_piece(board)
     mouse_clicks += 1
 
     return chess_board
