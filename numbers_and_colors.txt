@@ -1,0 +1,34 @@
+List for positioning images and surfaces (x,y):
+For 600^2 board  -->    multiples of 75 [0, 75, 150, 225, 300, 375, 450, 525]
+
+Current --> multiples of 100 [0, 100, 200, 300, 400, 500, 600, 700]
+
+Compound list for the initial board setup:
+[
+    ["br","bn","bb","bq","bk","bb","bn","br"],
+    ["bp","bp","bp","bp","bp","bp","bp","bp"],
+    ["_","_","_","_","_","_","_","_",],
+    ["_","_","_","_","_","_","_","_",],
+    ["_","_","_","_","_","_","_","_",],
+    ["_","_","_","_","_","_","_","_",],
+    ["wp","wp","wp","wp","wp","wp","wp","wp"],
+    ["wr","wn","wb","wq","wk","wb","wn","wr"]
+]
+
+
+COLORS
+Red Board:
+Black Square = RGB (240, 45, 30)
+White Square = RGB (255, 216, 230)
+
+Green Board:
+Black Square = RGB (88, 199, 108)
+White Square = RGB (237, 255, 215)
+
+Blue Board:
+Black Square = rgb(73, 120, 163)
+White Square = rgb(212, 224, 197)
+
+
+
+test github repository
