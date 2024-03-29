@@ -66,6 +66,14 @@ def setup_board(board, surface, dark_square=(73, 120, 163), light_square=(212, 2
 
     render_board(surface, board)
 
+def determine_turn(move_count):
+    if move_count % 2 != 0: # If it is White's turn
+        current_turn = "w"
+    else:
+        current_turn = "b"
+    can_pick_up = True # Somebody's turn just started so teh can_pick_up needs to be true.
+
+
 def get_mouse_pos():
     mouse_pos = list(pygame.mouse.get_pos())
     mouse_x = mouse_pos[0]
@@ -165,11 +173,11 @@ def pick_up_piece(board=[
     updated_chess_board = remove_piece(target_piece[0], target_piece[1], board)
 
 
-    return updated_chess_board
+    return [updated_chess_board, target_piece]
 
 
 
-def place_piece(board=[
+def place_piece(placed_piece, board=[
     ["br","bn","bb","bq","bk","bb","bn","br"],
     ["bp","bp","bp","bp","bp","bp","bp","bp"],
     ["_","_","_","_","_","_","_","_",],
@@ -185,14 +193,16 @@ def place_piece(board=[
     target_piece = piece_clicked(target_square)
 
     # Remove empty piece with actual chess piece
-    updated_chess_board = remove_piece(target_piece[0], target_piece[1], board, target_piece[0])
+    updated_chess_board = remove_piece(target_piece[0], target_piece[1], board, placed_piece)
     # tell game that player can no longer place a piece until another piece is picked up.
     can_pick_up = True
 
 
     return updated_chess_board
 
-def get_action(mouse_clicks, board=[
+
+
+def get_action(turn="w", board=[
     ["br","bn","bb","bq","bk","bb","bn","br"],
     ["bp","bp","bp","bp","bp","bp","bp","bp"],
     ["_","_","_","_","_","_","_","_",],
@@ -205,16 +215,4 @@ def get_action(mouse_clicks, board=[
     # If the mouse clicks is even then we pick up a piece
     # If the mouse clicks is odd, then we place a piece
 
-    if mouse_clicks % 2 == 0: # If Even
-        can_pick_up = True
-        chess_board = pick_up_piece(board)
-    else:
-        can_pick_up = False
-        chess_board = place_piece(board)
-    mouse_clicks += 1
-
-    return chess_board
-
-
-
-    
+    pass
