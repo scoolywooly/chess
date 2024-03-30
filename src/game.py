@@ -21,10 +21,17 @@ def render_board(surface, current_state=[
     cur_square_y_pos = 0
     # a for loop for every square in each row.
     for row in current_state:
+        print(row)
         cur_square_x_pos = 0
         for col in row: 
+            print(col)
+            # Make sure that any tuples are converted to string, instead of accsesing the entire tuple
+            if type(col) == tuple:
+                col = str(col[1])
+
             
-           
+
+            
             cur_square_image = pygame.image.load("chess-images/" + col + ".png") # col refers to "wp" or "_" in the compound list above.
             
 
@@ -65,15 +72,6 @@ def setup_board(board, surface, dark_square=(73, 120, 163), light_square=(212, 2
     
 
     render_board(surface, board)
-
-def determine_turn(move_count):
-    if move_count % 2 != 0: # If it is White's turn
-        current_turn = "w"
-    else:
-        current_turn = "b"
-    can_pick_up = True # Somebody's turn just started so teh can_pick_up needs to be true.
-
-    return current_turn
 
 def get_mouse_pos():
     mouse_pos = list(pygame.mouse.get_pos())
@@ -124,7 +122,7 @@ def piece_clicked(square, board=[
     target_row = board[y]
     target_piece = target_row[x]
 
-    
+    print(target_piece)
     return target_piece, [x+1, y+1]
 
 def remove_piece(piece=str, position=list, board=[
@@ -148,81 +146,38 @@ def remove_piece(piece=str, position=list, board=[
         row[x] = replace_with # we officially replace the row's x index with the "replace_with"
      
     #print(f"{col} =? {piece}")
-
+    print(board)
+    
     return board
 
 
 
 # Large Abstraction functions (use low abstraction functions to make larger ones):
-def pick_up_piece(board=[
-    ["br","bn","bb","bq","bk","bb","bn","br"],
-    ["bp","bp","bp","bp","bp","bp","bp","bp"],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["wp","wp","wp","wp","wp","wp","wp","wp"],
-    ["wr","wn","wb","wq","wk","wb","wn","wr"]
-    ]):
 
 
-    click_location = get_mouse_pos()
-    target_square = square_clicked(click_location)
-    target_piece = piece_clicked(target_square)
-
-   #Take off piece from board temporarilly
-    updated_chess_board = remove_piece(target_piece[0], target_piece[1], board)
-
-
-    return [updated_chess_board, target_piece]
+        
 
 
 
-def place_piece(placed_piece, board=[
-    ["br","bn","bb","bq","bk","bb","bn","br"],
-    ["bp","bp","bp","bp","bp","bp","bp","bp"],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["wp","wp","wp","wp","wp","wp","wp","wp"],
-    ["wr","wn","wb","wq","wk","wb","wn","wr"]
-    ]):
+def put_a_piece_on_the_board(piece, position, chess_board): # Piece needs to be a string like "wb" or "bn" meaning white bisop, or black knight
     
     click_location = get_mouse_pos()
     target_square = square_clicked(click_location)
-    target_piece = piece_clicked(target_square)
-
-    # Remove empty piece with actual chess piece
-    updated_chess_board = remove_piece(target_piece[0], target_piece[1], board, placed_piece)
-    # tell game that player can no longer place a piece until another piece is picked up.
-    can_pick_up = True
+    replace_piece = piece_clicked(target_square)
 
 
-    return updated_chess_board
+    # Use the remove_piece function, but instead of replacing with an "_" replace with ;the variable "piece"
+    updated_chess_board = remove_piece(replace_piece, position, chess_board, piece)
 
 
 
-
-
-
-
-
-
-
-
-
-def get_action(turn="w", board=[ # The MAIN() of the game.py functions
-    ["br","bn","bb","bq","bk","bb","bn","br"],
-    ["bp","bp","bp","bp","bp","bp","bp","bp"],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["wp","wp","wp","wp","wp","wp","wp","wp"],
-    ["wr","wn","wb","wq","wk","wb","wn","wr"]
-    ]):
     
-    chess_board = pick_up_piece(board)
+    
+    return [replace_piece, updated_chess_board]
 
-    return chess_board
+
+
+
+
+
+

@@ -44,6 +44,8 @@ def hold_piece(can_hold_piece, piece=str, mouse_pos=list):
         screen.blit(piece_image, (mouse_x, mouse_y))
     # Else Nothing happens
        
+
+
 # Game Loop
 while True:
     
@@ -53,14 +55,30 @@ while True:
         
         allow_quit()
 
-        if event.type == pygame.MOUSEBUTTONDOWN: # When we click the mouse
+        if event.type == pygame.MOUSEBUTTONDOWN and taken_a_piece == False: # When we click the mouse
             
-            pick_up_piece(chess_board)
-                    
+            # we find the square clicked, then remove the piece on that square
+            click_location = get_mouse_pos()
+            target_square = square_clicked(click_location)
+            target_piece = piece_clicked(target_square)
 
-        
-    setup_board(chess_board, screen)
-    
+            
+
+            updated_chess_board = remove_piece(target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], chess_board)
+
+            # prevent taking an empty square and placing an empty square somewhere else, jsut in case the player starts the game by clicking on the empty board.
+            if target_piece != "_":
+                taken_a_piece = True
+
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and taken_a_piece == True:
+             click_locatoin = get_mouse_pos()
+             target_square = square_clicked(click_location)
+             target_piece = piece_clicked(target_square)
+       
+
+    setup_board(updated_chess_board, screen)
+
     # Updates everything every frame.
     pygame.display.update()
 
