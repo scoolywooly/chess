@@ -6,7 +6,7 @@ import math
 import pygame
 from sys import exit
 from const import *
-from global_variables import mouse_pos, mouse_clicks, can_pick_up
+from global_variables import *
 from game import *
 
 
@@ -54,7 +54,7 @@ while True:
         allow_quit()
 
         if event.type == pygame.MOUSEBUTTONDOWN: # When we click the mouse
-            chess_board = get_action(mouse_clicks, chess_board)
+            chess_board = get_action(current_turn, chess_board)
             
 
         

@@ -1,4 +1,4 @@
-# I did this file all by myself
+# I did this file all by myself!
 import math
 import os
 import pygame
@@ -73,6 +73,7 @@ def determine_turn(move_count):
         current_turn = "b"
     can_pick_up = True # Somebody's turn just started so teh can_pick_up needs to be true.
 
+    return current_turn
 
 def get_mouse_pos():
     mouse_pos = list(pygame.mouse.get_pos())
@@ -202,7 +203,16 @@ def place_piece(placed_piece, board=[
 
 
 
-def get_action(turn="w", board=[
+
+
+
+
+
+
+
+
+
+def get_action(turn="w", board=[ # The MAIN() of the game.py functions
     ["br","bn","bb","bq","bk","bb","bn","br"],
     ["bp","bp","bp","bp","bp","bp","bp","bp"],
     ["_","_","_","_","_","_","_","_",],
@@ -212,7 +222,7 @@ def get_action(turn="w", board=[
     ["wp","wp","wp","wp","wp","wp","wp","wp"],
     ["wr","wn","wb","wq","wk","wb","wn","wr"]
     ]):
-    # If the mouse clicks is even then we pick up a piece
-    # If the mouse clicks is odd, then we place a piece
+    
+    chess_board = pick_up_piece(board)
 
-    pass
+    return chess_board
