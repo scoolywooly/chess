@@ -55,30 +55,51 @@ while True:
         
         allow_quit()
 
-        if event.type == pygame.MOUSEBUTTONDOWN and taken_a_piece == False: # When we click the mouse
+        if event.type == pygame.MOUSEBUTTONDOWN and taken_a_piece == False: # take a piece
             
             # we find the square clicked, then remove the piece on that square
             click_location = get_mouse_pos()
             target_square = square_clicked(click_location)
-            target_piece = piece_clicked(target_square)
+            target_piece = piece_clicked(target_square, updated_chess_board)
 
-            
+            if target_piece[TARGET_PIECE_INDEX] == "_":
+                
+                piece_to_be_removed = target_piece[TARGET_PIECE_INDEX]
+            else:
+                piece_to_be_removed = "_"
 
-            updated_chess_board = remove_piece(target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], chess_board)
+            updated_chess_board = remove_piece(piece_to_be_removed, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
 
             # prevent taking an empty square and placing an empty square somewhere else, jsut in case the player starts the game by clicking on the empty board.
-            if target_piece != "_":
-                taken_a_piece = True
+            
+            taken_a_piece = True
+            piece_that_was_taken = str(target_piece[TARGET_PIECE_INDEX])
+            print(piece_that_was_taken)
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and taken_a_piece == True: # place a piece
+            
+            click_location = get_mouse_pos()
+            target_square = square_clicked(click_location)
+            target_piece = piece_clicked(target_square, updated_chess_board)
+
+            if target_piece[TARGET_PIECE_INDEX] == "_":
+                piece_to_be_removed = "_"
 
                 
-        elif event.type == pygame.MOUSEBUTTONDOWN and taken_a_piece == True:
-             click_locatoin = get_mouse_pos()
-             target_square = square_clicked(click_location)
-             target_piece = piece_clicked(target_square)
-       
+            else:
+                piece_to_be_removed = target_piece[TARGET_PIECE_INDEX]
 
+            updated_chess_board = remove_piece(piece_that_was_taken, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
+
+            if target_piece == "_":
+                taken_a_piece = False
+                
+
+
+            piece_that_was_taken = piece_to_be_removed # clear the piece that was taken after being placed
     setup_board(updated_chess_board, screen)
-
+    
+    chess_board = updated_chess_board
     # Updates everything every frame.
     pygame.display.update()
 

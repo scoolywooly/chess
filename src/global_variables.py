@@ -1,6 +1,8 @@
 mouse_pos = []
 moves_made = 0
 taken_a_piece = False
+piece_to_be_removed = "_" # Global variable used all over code to tell what to replace with remove_piece function if not placing down a real piece.
+piece_that_was_taken = "_" # Global variable used all over code to tell what piece was taken
 # Whatever piece is currently being moved.
 current_turn = "w" # By Default the current turn starts on White.
 

@@ -21,14 +21,14 @@ def render_board(surface, current_state=[
     cur_square_y_pos = 0
     # a for loop for every square in each row.
     for row in current_state:
-        print(row)
+        
         cur_square_x_pos = 0
         for col in row: 
-            print(col)
+            
             # Make sure that any tuples are converted to string, instead of accsesing the entire tuple
             if type(col) == tuple:
                 col = str(col[1])
-
+            print(col)
             
 
             
@@ -122,10 +122,10 @@ def piece_clicked(square, board=[
     target_row = board[y]
     target_piece = target_row[x]
 
-    print(target_piece)
+    
     return target_piece, [x+1, y+1]
 
-def remove_piece(piece=str, position=list, board=[
+def remove_piece(replace_with, piece=str, position=list, board=[
         ["br","bn","bb","bq","bk","bb","bn","br"],
         ["bp","bp","bp","bp","bp","bp","bp","bp"],
         ["_","_","_","_","_","_","_","_",],
@@ -134,7 +134,7 @@ def remove_piece(piece=str, position=list, board=[
         ["_","_","_","_","_","_","_","_",],
         ["wp","wp","wp","wp","wp","wp","wp","wp"],
         ["wr","wn","wb","wq","wk","wb","wn","wr"]
-    ], replace_with="_"):
+    ]):
 
     y = position[1] - 1
     x = position[0] - 1 # computers count from zero: So, if its a 1 I need a 0. I shouldn't have to tell you this!
@@ -145,8 +145,7 @@ def remove_piece(piece=str, position=list, board=[
     if col == piece: # we make sure that the piece that was clicked on is the same as the intersecting square on both row and col
         row[x] = replace_with # we officially replace the row's x index with the "replace_with"
      
-    #print(f"{col} =? {piece}")
-    print(board)
+    
     
     return board
 
@@ -167,7 +166,7 @@ def put_a_piece_on_the_board(piece, position, chess_board): # Piece needs to be 
 
 
     # Use the remove_piece function, but instead of replacing with an "_" replace with ;the variable "piece"
-    updated_chess_board = remove_piece(replace_piece, position, chess_board, piece)
+    updated_chess_board = remove_piece(piece, replace_piece, position, chess_board)
 
 
 
