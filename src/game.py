@@ -28,7 +28,6 @@ def render_board(surface, current_state=[
             # Make sure that any tuples are converted to string, instead of accsesing the entire tuple
             if type(col) == tuple:
                 col = str(col[1])
-            print(col)
             
 
             
@@ -44,6 +43,8 @@ def render_board(surface, current_state=[
             
             cur_square_x_pos += 1
         cur_square_y_pos += 1
+    
+   
 
 def setup_board(board, surface, dark_square=(73, 120, 163), light_square=(212, 224, 197)):
 
@@ -138,7 +139,7 @@ def remove_piece(replace_with, piece=str, position=list, board=[
 
     y = position[1] - 1
     x = position[0] - 1 # computers count from zero: So, if its a 1 I need a 0. I shouldn't have to tell you this!
-    
+
     row = board[y] # we use y to get the "clicked_on_row" in the grid/board.
     col = row[x]   # we use x to get the specific piece from the clicked on row.
 

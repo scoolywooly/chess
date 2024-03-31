@@ -74,7 +74,7 @@ while True:
             
             taken_a_piece = True
             piece_picked_up = str(target_piece[TARGET_PIECE_INDEX])
-            print(piece_picked_up)
+            
 
 
 

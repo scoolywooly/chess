@@ -4,15 +4,16 @@ import pygame
 
 # I have to start the pygame library
 pygame.init()
+
 # I have to let the test file know what the board looks like
 board_setup = [
         ["br","bn","bb","bq","bk","bb","bn","br"],
         ["bp","bp","bp","bp","bp","bp","bp","bp"],
         ["_","_","_","_","_","_","_","_",],
         ["_","_","_","_","_","_","_","_",],
+        ["_","_","_","_","_","wp","_","_",],
         ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
-        ["wp","wp","wp","wp","wp","wp","wp","wp"],
+        ["wp","wp","wp","wp","_","wp","wp","wp"],
         ["wr","wn","wb","wq","wk","wb","wn","wr"]
     ]
 
@@ -24,10 +25,9 @@ def test_piece_clicked():
     assert piece_clicked([1,1], board_setup) == ('br', [1,1])
     assert piece_clicked([1,2], board_setup) == ('bp', [1,2])
 
+
+
+
 test_square_clicked()
 test_piece_clicked()
-
-
-
-
 
