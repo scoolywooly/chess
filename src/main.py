@@ -73,8 +73,8 @@ while True:
             # prevent taking an empty square and placing an empty square somewhere else, jsut in case the player starts the game by clicking on the empty board.
             
             taken_a_piece = True
-            piece_that_was_taken = str(target_piece[TARGET_PIECE_INDEX])
-            print(piece_that_was_taken)
+            piece_picked_up = str(target_piece[TARGET_PIECE_INDEX])
+            print(piece_picked_up)
 
         elif event.type == pygame.MOUSEBUTTONDOWN and taken_a_piece == True: # place a piece
             
@@ -98,14 +98,14 @@ while True:
             else: # If you are just moving pieces
                 piece_to_be_removed = target_piece[TARGET_PIECE_INDEX]
 
-            updated_chess_board = remove_piece(piece_that_was_taken, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
+            updated_chess_board = remove_piece(piece_picked_up, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
 
             if target_piece == "_":
                 taken_a_piece = False
                 
 
 
-            piece_that_was_taken = piece_to_be_removed # clear the piece that was taken after being placed
+            piece_picked_up = piece_to_be_removed # clear the piece that was taken after being placed
     setup_board(updated_chess_board, screen)
     
     chess_board = updated_chess_board
