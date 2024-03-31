@@ -158,21 +158,37 @@ def remove_piece(replace_with, piece=str, position=list, board=[
 
 
 
-def put_a_piece_on_the_board(piece, position, chess_board): # Piece needs to be a string like "wb" or "bn" meaning white bisop, or black knight
-    
+def place_a_piece(): # Piece needs to be a string like "wb" or "bn" meaning white bisop, or black knight
     click_location = get_mouse_pos()
     target_square = square_clicked(click_location)
-    replace_piece = piece_clicked(target_square)
+    target_piece = piece_clicked(target_square, updated_chess_board)
+
+    what_you_clicked = target_piece[TARGET_PIECE_INDEX]
+    if what_you_clicked == "_": # If you clicked an empty square
+        piece_to_be_removed = "_"
+
+                
+    elif what_you_clicked in white_pieces_left: # If you are trying to take a piece
+        piece_to_be_removed = target_piece[TARGET_PIECE_INDEX] # sets the piece to be captured
+        white_pieces_left.remove(what_you_clicked) # takes the piece you captured out of the remaining list
+
+    elif what_you_clicked in black_pieces_left:
+        piece_to_be_removed = target_piece[TARGET_PIECE_INDEX] # sets the piece to be captured
+        black_pieces_left.remove(what_you_clicked) # takes the piece you captured out of the remaining list
+
+    else: # If you are just moving pieces
+        piece_to_be_removed = target_piece[TARGET_PIECE_INDEX]
+
+    updated_chess_board = remove_piece(piece_picked_up, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
+
+    if target_piece == "_":
+        taken_a_piece = False
+                
 
 
-    # Use the remove_piece function, but instead of replacing with an "_" replace with ;the variable "piece"
-    updated_chess_board = remove_piece(piece, replace_piece, position, chess_board)
+    piece_picked_up = piece_to_be_removed # clear the piece that was taken after being placed
 
 
-
-    
-    
-    return [replace_piece, updated_chess_board]
 
 
 

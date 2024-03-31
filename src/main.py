@@ -76,6 +76,8 @@ while True:
             piece_picked_up = str(target_piece[TARGET_PIECE_INDEX])
             print(piece_picked_up)
 
+
+
         elif event.type == pygame.MOUSEBUTTONDOWN and taken_a_piece == True: # place a piece
             
             click_location = get_mouse_pos()
