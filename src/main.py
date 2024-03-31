@@ -82,11 +82,20 @@ while True:
             target_square = square_clicked(click_location)
             target_piece = piece_clicked(target_square, updated_chess_board)
 
-            if target_piece[TARGET_PIECE_INDEX] == "_":
+            what_you_clicked = target_piece[TARGET_PIECE_INDEX]
+            if what_you_clicked == "_": # If you clicked an empty square
                 piece_to_be_removed = "_"
 
                 
-            else:
+            elif what_you_clicked in white_pieces_left: # If you are trying to take a piece
+                piece_to_be_removed = target_piece[TARGET_PIECE_INDEX] # sets the piece to be captured
+                white_pieces_left.remove(what_you_clicked) # takes the piece you captured out of the remaining list
+
+            elif what_you_clicked in black_pieces_left:
+                piece_to_be_removed = target_piece[TARGET_PIECE_INDEX] # sets the piece to be captured
+                black_pieces_left.remove(what_you_clicked) # takes the piece you captured out of the remaining list
+
+            else: # If you are just moving pieces
                 piece_to_be_removed = target_piece[TARGET_PIECE_INDEX]
 
             updated_chess_board = remove_piece(piece_that_was_taken, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
