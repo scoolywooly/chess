@@ -25,7 +25,8 @@ def test_piece_clicked():
     assert piece_clicked([1,1], board_setup) == ('br', [1,1])
     assert piece_clicked([1,2], board_setup) == ('bp', [1,2])
 
-
+def test_get_type_of_move():
+    pass
 
 
 test_square_clicked()

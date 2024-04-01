@@ -58,70 +58,43 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN and holding_a_piece == False: # take a piece
             
             # we find the square clicked, then remove the piece on that square
-            click_location = get_mouse_pos()
+            target_piece = get_target()
 
-            target_square = square_clicked(click_location)
-
-            target_piece = piece_clicked(target_square, updated_chess_board)
-
+            what_you_clicked = target_piece[TARGET_PIECE_INDEX]
+            where_it_was = target_piece[TARGET_POS_INDEX]
 
 
-            if target_piece[TARGET_PIECE_INDEX] == "_":
-                
-                piece_to_be_removed = target_piece[TARGET_PIECE_INDEX]
-            else:
-                piece_to_be_removed = "_"
+            piece_to_be_removed = get_type_of_move(what_you_clicked, what_you_clicked) # For removing a piece from the board, the floating piece to be switched on the board needs to be an empty square
 
-            updated_chess_board = remove_piece(piece_to_be_removed, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
+            updated_chess_board = remove_piece(piece_to_be_removed, what_you_clicked, where_it_was, updated_chess_board)
 
             # prevent taking an empty square and placing an empty square somewhere else, jsut in case the player starts the game by clicking on the empty board.
             
             holding_a_piece = True
-            piece_picked_up = str(target_piece[TARGET_PIECE_INDEX])
+            piece_picked_up = what_you_clicked
             
 
 
 
         elif event.type == pygame.MOUSEBUTTONDOWN and holding_a_piece == True: # place a piece
-            
-            click_location = get_mouse_pos()
-
-            target_square = square_clicked(click_location)
-
-            target_piece = piece_clicked(target_square, updated_chess_board)
+            target_piece = get_target()
 
             what_you_clicked = target_piece[TARGET_PIECE_INDEX]
+            where_it_was = target_piece[TARGET_POS_INDEX]
 
+            piece_to_be_removed = get_type_of_move(what_you_clicked, piece_picked_up) # For putting a piece back on the board, the floating piece needs to be different from what you just clicked.
 
-            if what_you_clicked == "_": # If you clicked an empty square
-                piece_to_be_removed = "_"
-
-                
-            elif what_you_clicked in white_pieces_left: # If you are trying to take a piece
-
-                piece_to_be_removed = target_piece[TARGET_PIECE_INDEX] # sets the piece to be captured
-
-                white_pieces_left.remove(what_you_clicked) # takes the piece you captured out of the remaining list
-
-            elif what_you_clicked in black_pieces_left:
-
-                piece_to_be_removed = target_piece[TARGET_PIECE_INDEX] # sets the piece to be captured
-
-                black_pieces_left.remove(what_you_clicked) # takes the piece you captured out of the remaining list
-
-            else: # If you are just moving pieces
-
-                piece_to_be_removed = target_piece[TARGET_PIECE_INDEX]
-
-            updated_chess_board = remove_piece(piece_picked_up, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
+            updated_chess_board = remove_piece(piece_picked_up, what_you_clicked, where_it_was, updated_chess_board)
 
             if target_piece == "_":
 
                 holding_a_piece = False
                 
 
+            piece_picked_up = piece_to_be_removed
+     # clear the piece that was taken after being placed
+          
 
-            piece_picked_up = piece_to_be_removed # clear the piece that was taken after being placed
     setup_board(updated_chess_board, screen)
     
     chess_board = updated_chess_board

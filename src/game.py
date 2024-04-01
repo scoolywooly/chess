@@ -126,7 +126,7 @@ def piece_clicked(square, board=[
     
     return target_piece, [x+1, y+1]
 
-def remove_piece(replace_with, piece=str, position=list, board=[
+def remove_piece(replace_with, replaced_piece=str, position=list, board=[
         ["br","bn","bb","bq","bk","bb","bn","br"],
         ["bp","bp","bp","bp","bp","bp","bp","bp"],
         ["_","_","_","_","_","_","_","_",],
@@ -143,90 +143,36 @@ def remove_piece(replace_with, piece=str, position=list, board=[
     row = board[y] # we use y to get the "clicked_on_row" in the grid/board.
     col = row[x]   # we use x to get the specific piece from the clicked on row.
 
-    if col == piece: # we make sure that the piece that was clicked on is the same as the intersecting square on both row and col
+    if col == replaced_piece: # we make sure that the piece that was clicked on is the same as the intersecting square on both row and col
         row[x] = replace_with # we officially replace the row's x index with the "replace_with"
      
     
     
     return board
 
+def get_type_of_move(initial_clicked_piece, floating_piece): # Floating piece would be the piece you are holding in your hand.
 
+    # determines whether or not to replace the piece you are removing with blank space, or replace the piece that was moved, and prevents 
+    # chess pieces to come back from the dead after they were captured because they were stored in a variable that should be cleared after 
+    # every capture.
+    if initial_clicked_piece and floating_piece == "_": # If I'm moving a piece to an empty square I'm clicking on "_"
+        replacement_png = initial_clicked_piece
 
-# Large Abstraction functions (use low abstraction functions to make larger ones):
-
-
+    elif initial_clicked_piece and floating_piece != "_": # If I'm capturing a piece then I click on it and it's remvoed from the board, and added to a removed pieces list.
+        replacement_png = "_"
         
 
+    else: # Otherwise just replace what was moved from a chess square with an empty chess square.
+        replacement_png = floating_piece
+    return replacement_png
 
 
-def place_a_piece(holding_a_piece): # Piece needs to be a string like "wb" or "bn" meaning white bisop, or black knight
-    
+def get_target():
     click_location = get_mouse_pos()
 
     target_square = square_clicked(click_location)
 
     target_piece = piece_clicked(target_square, updated_chess_board)
 
-    what_you_clicked = target_piece[TARGET_PIECE_INDEX]
-
-
-    if what_you_clicked == "_": # If you clicked an empty square
-        piece_to_be_removed = "_"
-
-                
-    elif what_you_clicked in white_pieces_left: # If you are trying to take a piece
-
-        piece_to_be_removed = target_piece[TARGET_PIECE_INDEX] # sets the piece to be captured
-
-        white_pieces_left.remove(what_you_clicked) # takes the piece you captured out of the remaining list
-
-    elif what_you_clicked in black_pieces_left:
-
-        piece_to_be_removed = target_piece[TARGET_PIECE_INDEX] # sets the piece to be captured
-
-        black_pieces_left.remove(what_you_clicked) # takes the piece you captured out of the remaining list
-
-    else: # If you are just moving pieces
-
-        piece_to_be_removed = target_piece[TARGET_PIECE_INDEX]
-
-    updated_chess_board = remove_piece(piece_picked_up, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
-
-    if target_piece == "_":
-
-        holding_a_piece = False
-                
-
-
-    piece_picked_up = piece_to_be_removed # clear the piece that was taken after being placed
-
-def take_a_piece(holding_a_piece):
-    # we find the square clicked, then remove the piece on that square
-    click_location = get_mouse_pos()
-
-    target_square = square_clicked(click_location)
-
-    target_piece = piece_clicked(target_square, updated_chess_board)
-
-
-
-    if target_piece[TARGET_PIECE_INDEX] == "_":
-                
-        piece_to_be_removed = target_piece[TARGET_PIECE_INDEX]
-    else:
-        piece_to_be_removed = "_"
-
-    updated_chess_board = remove_piece(piece_to_be_removed, target_piece[TARGET_PIECE_INDEX],target_piece[TARGET_POS_INDEX], updated_chess_board)
-
-    # prevent taking an empty square and placing an empty square somewhere else, jsut in case the player starts the game by clicking on the empty board.
-            
-    holding_a_piece = True
-    piece_picked_up = str(target_piece[TARGET_PIECE_INDEX])
-
-
-
-
-
-
-
-
+    return target_piece
+        
