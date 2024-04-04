@@ -5,6 +5,8 @@ import pygame
 from const import *
 from global_variables import *
 
+
+
 # Low Abstraction
 def render_board(surface, current_state=[
         ["br","bn","bb","bq","bk","bb","bn","br"],
@@ -176,3 +178,54 @@ def get_target():
 
     return target_piece
         
+def get_legal_moves(piece_name=str, piece_pos=list, board=[
+    ["br","bn","bb","bq","bk","bb","bn","br"],
+    ["bp","bp","bp","bp","bp","bp","bp","bp"],
+    ["_","_","_","_","_","_","_","_",],
+    ["_","_","_","_","_","_","_","_",],
+    ["_","_","_","_","_","_","_","_",],
+    ["_","_","_","_","_","_","_","_",],
+    ["wp","wp","wp","wp","wp","wp","wp","wp"],
+    ["wr","wn","wb","wq","wk","wb","wn","wr"]
+    ]):
+
+    parsed_name = list(piece_name)
+    piece_color = parsed_name[TARGET_PIECE_INDEX]
+    piece_type = parsed_name[TARGET_TYPE_INDEX]
+    possible_moves = [] # this begins as an empty list
+    x_pos = piece_pos[X_INDEX]
+    y_pos = piece_pos[Y_INDEX]
+
+    if piece_type == "k": # If the piece is a king
+            pass
+    elif piece_type == "q":
+            pass
+    elif piece_type == "r":
+            pass
+    elif piece_type == "b":
+            pass
+    elif piece_type == "n":
+            pass
+    elif piece_type == "p":
+            pass
+    else:
+            pass
+    
+    return possible_moves
+
+    def king_moves(color, position, board): # We check if there are any pieces in the way that are white
+        king_moves = []
+
+        checking_x = 0
+        checking_y = 0
+
+        checking_range = 1 # how far out the piece can move
+        for row in board:
+            for col in row:
+                other_piece = col
+
+                if other_piece != "_": #If there is any one blocking the way. 
+                    checking_range = [checking_x, checking_y]
+
+                checking_x += 1
+            checking_y += 1

@@ -12,6 +12,7 @@ from game import *
 
 # Global Variables
 pygame.init()
+pygame.mixer.init()
 screen = pygame.display.set_mode((SCREEN_W,SCREEN_H))
 pygame.display.set_caption("Chess")
 chess_board = [
@@ -47,6 +48,7 @@ def hold_piece(can_hold_piece, piece=str, mouse_pos=list):
 
 
 # Game Loop
+move = pygame.mixer.Sound("chess-sounds/chess-move.mp3")
 while True:
     
     for event in pygame.event.get():  # any kind of input is handeled here
@@ -85,6 +87,9 @@ while True:
             piece_to_be_removed = get_type_of_move(what_you_clicked, piece_picked_up) # For putting a piece back on the board, the floating piece needs to be different from what you just clicked.
 
             updated_chess_board = remove_piece(piece_picked_up, what_you_clicked, where_it_was, updated_chess_board)
+            
+            #Play a sound
+            move.play()
 
             if target_piece == "_":
 

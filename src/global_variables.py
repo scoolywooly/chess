@@ -6,6 +6,7 @@ piece_that_was_taken = "_" # Global variable used all over code to tell what pie
 
 
 
+
 # Whatever piece is currently being moved.
 current_turn = "w" # By Default the current turn starts on White.
 
