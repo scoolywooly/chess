@@ -177,7 +177,11 @@ def get_target():
     target_piece = piece_clicked(target_square, updated_chess_board)
 
     return target_piece
-        
+
+def get_color(piece):
+    parsed_name = list(piece)
+    return parsed_name[TARGET_PIECE_INDEX]
+
 def get_legal_moves(piece_name=str, piece_pos=list, board=[
     ["br","bn","bb","bq","bk","bb","bn","br"],
     ["bp","bp","bp","bp","bp","bp","bp","bp"],
@@ -213,19 +217,84 @@ def get_legal_moves(piece_name=str, piece_pos=list, board=[
     
     return possible_moves
 
-    def king_moves(color, position, board): # We check if there are any pieces in the way that are white
-        king_moves = []
+def king_moves(my_color, position, board): # my_color should be either "w" or "b"
+    legal_moves = []
 
-        checking_x = 0
-        checking_y = 0
+    x = position[X_INDEX]
+    y = position[Y_INDEX]
 
-        checking_range = 1 # how far out the piece can move
-        for row in board:
-            for col in row:
-                other_piece = col
+    limit_range = 1 # how far out the piece can move
+    
+    # By default, a chess king can move 1 square in all directions, 
+    # so I'm going to make 8 lists of all possible moves by their X and Y positions
+    # Then I'm going to loop through them and check which ones are empty "_" or have a piece in them.
+    # IF there is a piece in them, then I'll remove the respective X and Y position from the list of possible moves unless it's
+    # the opposing piece: != color. 
+    king_moves = [[x + limit_range, y + limit_range],[x + limit_range, y],[x + limit_range, y + limit_range],
+                  [x, y + limit_range],[x - limit_range, y + limit_range],[x - limit_range, y],
+                  [x - limit_range, y - limit_range],[x, y - limit_range]] 
+    
+    for each_move in king_moves:
+        checking_x = each_move[X_INDEX]
+        checking_y = each_move[Y_INDEX]
 
-                if other_piece != "_": #If there is any one blocking the way. 
-                    checking_range = [checking_x, checking_y]
+        row_that_move_is_on = board[checking_y - 1] # I have to minus once because I had exported the piece's pos earlier from 1-8 instead of 0-7.
+        col_that_move_is_on =  row_that_move_is_on[checking_x]
 
-                checking_x += 1
-            checking_y += 1
+
+        if col_that_move_is_on == "_":
+            legal_moves.append(each_move) # adds it to the list that is going to be returned as the legal moves the clicked piece can make.
+
+        else: # Use an else statement because I have to run some code before I do another conditional logic statement.
+            other_piece_name = col_that_move_is_on
+
+            other_piece_color = get_color(other_piece_name)
+            if other_piece_color != my_color:
+                legal_moves.append(each_move)
+            else:
+                 pass 
+            # I will implement -"preventing piece from moving onto controlled squares"- later.
+    
+    return legal_moves
+
+def rood_moves(my_color, position, board):
+    
+    legal_moves = []
+    # By default, a chess rook can move up to 7 squares in all directions, 
+    # so I'm going to make 8 lists of all possible moves by their X and Y positions
+    # Then I'm going to loop through them and check which ones are empty "_" or have a piece in them.
+    # IF there is a piece in them, then I'll remove the respective X and Y position from the list of possible moves unless it's
+    # the opposing piece: != color. 
+    
+    x = position[X_INDEX]
+    y = position[Y_INDEX]
+
+
+
+
+
+
+
+    
+    for each_move in king_moves:
+        checking_x = each_move[X_INDEX]
+        checking_y = each_move[Y_INDEX]
+
+        row_that_move_is_on = board[checking_y - 1] # I have to minus once because I had exported the piece's pos earlier from 1-8 instead of 0-7.
+        col_that_move_is_on =  row_that_move_is_on[checking_x]
+
+
+        if col_that_move_is_on == "_":
+            legal_moves.append(each_move) # adds it to the list that is going to be returned as the legal moves the clicked piece can make.
+
+        else: # Use an else statement because I have to run some code before I do another conditional logic statement.
+            other_piece_name = col_that_move_is_on
+
+            other_piece_color = get_color(other_piece_name)
+            if other_piece_color != my_color:
+                legal_moves.append(each_move)
+            else:
+                 pass 
+            # I will implement -"preventing piece from moving onto controlled squares"- later.
+    
+    return legal_moves
