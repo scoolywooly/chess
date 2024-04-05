@@ -240,6 +240,12 @@ def allow_move(desired_move=list, piece=str, board=list):
     # Check if we are trying to move a king, if so--then we need to make sure the square isn't controlled by the enemey.
     check_is_king = parced_piece_str[TARGET_TYPE_INDEX]
 
+    """It works until you put the piece picked up bacck, and then it looks to see if there is a second character in the empty piece which their isn't
+    So I need to rename all instances of empty square from '_' to '__' and then add a conditional statement at line 234 to see if the second character is '_', 
+    and then let the allow_move to return true-letting the player put the piece back"""
+
+
+
     if check_is_king == "k":
         its_controlled = check_if_controlled(opposing_color, desired_move)
     
