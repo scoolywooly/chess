@@ -20,3 +20,8 @@ updated_chess_board = [
     ["wp","wp","wp","wp","wp","wp","wp","wp"],
     ["wr","wn","wb","wq","wk","wb","wn","wr"]
     ] # defininf an emptylist, so that it doesn't throw the "not defined" error later
+
+controlled_sqaures = {
+    "w" : [[1,7],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7],[8,7]], # a list of all the squares that white controlls in the begining of the game
+    "b" : [[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],[7,2],[8,2]]  # a list of all the squares that black controlls in the begining of the game
+}

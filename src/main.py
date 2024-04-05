@@ -84,19 +84,22 @@ while True:
             what_you_clicked = target_piece[TARGET_PIECE_INDEX]
             where_it_was = target_piece[TARGET_POS_INDEX]
 
-            piece_to_be_removed = get_type_of_move(what_you_clicked, piece_picked_up) # For putting a piece back on the board, the floating piece needs to be different from what you just clicked.
+            its_a_legal_move = allow_move(where_it_was, piece_picked_up, updated_chess_board)
 
-            updated_chess_board = remove_piece(piece_picked_up, what_you_clicked, where_it_was, updated_chess_board)
-            
-            #Play a sound
-            move.play()
+            if its_a_legal_move:
+                piece_to_be_removed = get_type_of_move(what_you_clicked, piece_picked_up) # For putting a piece back on the board, the floating piece needs to be different from what you just clicked.
 
-            if target_piece == "_":
-
-                holding_a_piece = False
+                updated_chess_board = remove_piece(piece_picked_up, what_you_clicked, where_it_was, updated_chess_board)
                 
+                #Play a sound
+                move.play()
 
-            piece_picked_up = piece_to_be_removed
+                if target_piece == "_":
+
+                    holding_a_piece = False
+                    
+
+                piece_picked_up = piece_to_be_removed
      # clear the piece that was taken after being placed
           
 

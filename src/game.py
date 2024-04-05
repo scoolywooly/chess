@@ -182,119 +182,87 @@ def get_color(piece):
     parsed_name = list(piece)
     return parsed_name[TARGET_PIECE_INDEX]
 
-def get_legal_moves(piece_name=str, piece_pos=list, board=[
-    ["br","bn","bb","bq","bk","bb","bn","br"],
-    ["bp","bp","bp","bp","bp","bp","bp","bp"],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["_","_","_","_","_","_","_","_",],
-    ["wp","wp","wp","wp","wp","wp","wp","wp"],
-    ["wr","wn","wb","wq","wk","wb","wn","wr"]
-    ]):
+def get_type(piece):
+    parsed_name = list(piece)
+    return parsed_name[TARGET_TYPE_INDEX]
 
-    parsed_name = list(piece_name)
-    piece_color = parsed_name[TARGET_PIECE_INDEX]
-    piece_type = parsed_name[TARGET_TYPE_INDEX]
-    possible_moves = [] # this begins as an empty list
-    x_pos = piece_pos[X_INDEX]
-    y_pos = piece_pos[Y_INDEX]
+def check_if_controlled(controlling_color=str, desired_move=list):
+    """All squares controlled by a piece that prevents a king from moving there, is stored in a dictionary"""
+    is_off_limits = False
 
-    if piece_type == "k": # If the piece is a king
-            pass
-    elif piece_type == "q":
-            pass
-    elif piece_type == "r":
-            pass
-    elif piece_type == "b":
-            pass
-    elif piece_type == "n":
-            pass
-    elif piece_type == "p":
-            pass
+    enemey_territory = controlled_sqaures[controlling_color]
+
+    if desired_move in enemey_territory:
+        is_off_limits = True
     else:
-            pass
+        is_off_limits = False
+                                                                                        
+    return is_off_limits
     
-    return possible_moves
+def check_if_occupied_by_us(my_color=str, desired_move=list, board=list):
+    is_occupied = False # Defaults to false
 
-def king_moves(my_color, position, board): # my_color should be either "w" or "b"
-    legal_moves = []
+    check_x = desired_move[X_INDEX] - 1 # I have to minus 1, because I log the piece's postion counting from 1,
+    check_y = desired_move[Y_INDEX] - 1 # counting from 1, whereas python counts from 0
 
-    x = position[X_INDEX]
-    y = position[Y_INDEX]
+    row = board[check_y]
+    desired_square = row[check_x]
 
-    limit_range = 1 # how far out the piece can move
+    parsed_piece_name_on_square = list(desired_square)
+
+    if parsed_piece_name_on_square[TARGET_PIECE_INDEX] == my_color: # my_color should only be either "w" or "b"
+        is_occupied = True
     
-    # By default, a chess king can move 1 square in all directions, 
-    # so I'm going to make 8 lists of all possible moves by their X and Y positions
-    # Then I'm going to loop through them and check which ones are empty "_" or have a piece in them.
-    # IF there is a piece in them, then I'll remove the respective X and Y position from the list of possible moves unless it's
-    # the opposing piece: != color. 
-    king_moves = [[x + limit_range, y + limit_range],[x + limit_range, y],[x + limit_range, y + limit_range],
-                  [x, y + limit_range],[x - limit_range, y + limit_range],[x - limit_range, y],
-                  [x - limit_range, y - limit_range],[x, y - limit_range]] 
+    return is_occupied
+
+
+
+def allow_move(desired_move=list, piece=str, board=list):
+        # desired_move is the x and y position of which square the mouse clicked after selecting a piece, but it won't go through
+        # with moving the piece there if desired_move is occupied by a piece of the current player's own color, or if the piece
+        # intended to be moved is a king and the desired_move is controlled.
+    allowed = True # Default
+    opposing_color = "pass in value"
+
+    parced_piece_str = list(piece)
+    my_color = parced_piece_str[TARGET_PIECE_INDEX]
+
+    if my_color == "w":
+        opposing_color = "b"
+    elif my_color == "b":
+        opposing_color = "w"
+    else:
+        print("You are trying to check if an empty square can move!")
+
+    # Check if one of our own pieces is there already
+    its_occupied_by_us = check_if_occupied_by_us(my_color,desired_move,board)
+
+    # Check if we are trying to move a king, if so--then we need to make sure the square isn't controlled by the enemey.
+    check_is_king = parced_piece_str[TARGET_TYPE_INDEX]
+
+    if check_is_king == "k":
+        its_controlled = check_if_controlled(opposing_color, desired_move)
     
-    for each_move in king_moves:
-        checking_x = each_move[X_INDEX]
-        checking_y = each_move[Y_INDEX]
+        if its_controlled or its_occupied_by_us:
+            allowed = False
 
-        row_that_move_is_on = board[checking_y - 1] # I have to minus once because I had exported the piece's pos earlier from 1-8 instead of 0-7.
-        col_that_move_is_on =  row_that_move_is_on[checking_x]
+        elif its_controlled and its_occupied_by_us:
+            allowed = False
 
+        elif its_occupied_by_us == False and its_occupied_by_us == False:
+            allowed = True
 
-        if col_that_move_is_on == "_":
-            legal_moves.append(each_move) # adds it to the list that is going to be returned as the legal moves the clicked piece can make.
+    elif check_is_king != "k": # If I am any other piece than a King...
 
-        else: # Use an else statement because I have to run some code before I do another conditional logic statement.
-            other_piece_name = col_that_move_is_on
+        # Since its not the king, the only thing we have to worry about is if the square is occupied by our own piece
+        if its_occupied_by_us:
+            allowed = False
+            allowed = False
 
-            other_piece_color = get_color(other_piece_name)
-            if other_piece_color != my_color:
-                legal_moves.append(each_move)
-            else:
-                 pass 
-            # I will implement -"preventing piece from moving onto controlled squares"- later.
-    
-    return legal_moves
+    """The conditional logic for checking a king goes here goes here.
+    It will determine if the King's position is controlled by the enemey, 
+    then the only pieces that can be moved will be the King or any piece that can block the check.
+    and we determine that by running a for loop that looks at each of the squares from the 
+    attacking piece to the king, and seeing if a defending piece can move in place"""
 
-def rood_moves(my_color, position, board):
-    
-    legal_moves = []
-    # By default, a chess rook can move up to 7 squares in all directions, 
-    # so I'm going to make 8 lists of all possible moves by their X and Y positions
-    # Then I'm going to loop through them and check which ones are empty "_" or have a piece in them.
-    # IF there is a piece in them, then I'll remove the respective X and Y position from the list of possible moves unless it's
-    # the opposing piece: != color. 
-    
-    x = position[X_INDEX]
-    y = position[Y_INDEX]
-
-
-
-
-
-
-
-    
-    for each_move in king_moves:
-        checking_x = each_move[X_INDEX]
-        checking_y = each_move[Y_INDEX]
-
-        row_that_move_is_on = board[checking_y - 1] # I have to minus once because I had exported the piece's pos earlier from 1-8 instead of 0-7.
-        col_that_move_is_on =  row_that_move_is_on[checking_x]
-
-
-        if col_that_move_is_on == "_":
-            legal_moves.append(each_move) # adds it to the list that is going to be returned as the legal moves the clicked piece can make.
-
-        else: # Use an else statement because I have to run some code before I do another conditional logic statement.
-            other_piece_name = col_that_move_is_on
-
-            other_piece_color = get_color(other_piece_name)
-            if other_piece_color != my_color:
-                legal_moves.append(each_move)
-            else:
-                 pass 
-            # I will implement -"preventing piece from moving onto controlled squares"- later.
-    
-    return legal_moves
+    return allowed
