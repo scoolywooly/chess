@@ -470,8 +470,8 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
     elif piece == "b": # bishop
         
         # we use incrementing x and y variables to look at all the possible move cordinates, until the cordinates we are looking at are full.
-        looking_at_x = 0
-        looking_at_y = 0
+        looking_at_x = current_x
+        looking_at_y = current_y
         squares_in_between = []
         distance =  abs(desired_y - current_y) # the distance on the x asis should be the same because bishops move in a 45 degree line
         
@@ -480,47 +480,58 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
         if desired_y > current_y and desired_x > current_x:
             for space_between in range(distance):
                 # If moving down-right
-                looking_at_x += space_between # x increases
-                looking_at_y += space_between # Y increases 
-                looking_at_pos = [looking_at_x, looking_at_y]
+                looking_at_x += 1 # x increases
+                looking_at_y += 1 # Y increases 
+                print([looking_at_x,looking_at_y])
 
-                if looking_at_pos == desired_move:
+                if looking_at_x != desired_x and looking_at_y != desired_y:
+                    too_far = True
+                else:
                     too_far = False
-                   
+                    
 
         elif desired_y < current_y and desired_x < current_x:
             for space_between in range(distance):
                 # If moving up-left
-                looking_at_x -= space_between  # x decreases
-                looking_at_y -= space_between # Y decreases 
+                looking_at_x -= 1  # x decreases
+                looking_at_y -= 1 # Y decreases 
                 looking_at_pos = [looking_at_x, looking_at_y]
 
-                if looking_at_pos == desired_move:
+                if looking_at_x != desired_x and looking_at_y != desired_y:
+                    too_far = True
+                else:
                     too_far = False
+                    
                     
                 
                     
         elif desired_y > current_y and desired_x < current_x:
             for space_between in range(distance):    
                 # If moving down-left
-                looking_at_x -= space_between # x decreases
-                looking_at_y += space_between # Y increases 
+                looking_at_x -= 1 # x decreases
+                looking_at_y += 1 # Y increases 
                 looking_at_pos = [looking_at_x, looking_at_y]
 
-                if looking_at_pos == desired_move:
+                if looking_at_x != desired_x and looking_at_y != desired_y:
+                    too_far = True
+                else:
                     too_far = False
+                    
                     
                
                     
         elif desired_y < current_y and desired_x > current_x:
             for space_between in range(distance):
                 # If moving up-right
-                looking_at_x += space_between # x increases
-                looking_at_y -= space_between # Y decreases 
+                looking_at_x += 1 # x increases
+                looking_at_y -= 1 # Y decreases 
                 looking_at_pos = [looking_at_x, looking_at_y]
 
-                if looking_at_pos == desired_move:
+                if looking_at_x != desired_x and looking_at_y != desired_y:
+                    too_far = True
+                else:
                     too_far = False
+                    
                     
                 
                     
