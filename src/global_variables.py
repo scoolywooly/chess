@@ -20,7 +20,8 @@ updated_chess_board = [
     ["__","__","__","__","__","__","__","__",],
     ["wp","wp","wp","wp","wp","wp","wp","wp"],
     ["wr","wn","wb","wq","wk","wb","wn","wr"]
-    ] # defininf an emptylist, so that it doesn't throw the "not defined" error later
+]
+ # defininf an emptylist, so that it doesn't throw the "not defined" error later
 
 chess_set = ["k","q","r","b","n","p"]
 

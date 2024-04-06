@@ -120,7 +120,7 @@ def piece_clicked(square, board=[
         ["wr","wn","wb","wq","wk","wb","wn","wr"]
     ]):
     x = square[0] - 1
-    y = square[1] - 1 # so that the boad doesn't look for an extra row since the computer counts from zero, and the board is made top->down
+    y = square[1] - 1 # so that the board doesn't look for an extra row since the computer counts from zero, and the board is made top->down
 
     target_row = board[y]
     target_piece = target_row[x]
@@ -353,6 +353,8 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                     too_far = False
                 elif square == "__" and bad_color in squares_in_between:
                     too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
                 else:
                     too_far = True
                 
@@ -388,6 +390,140 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                 else:
                     too_far = True
                 
+    elif piece == "q": # queen
+        
+        # we use incrementing x and y variables to look at all the possible move cordinates, until the cordinates we are looking at are full.
+        looking_at_x = 0
+        looking_at_y = 0
+        squares_in_between = []
+
+
+        if desired_y == current_y:
+            # If moving horizantilly
+            space_between = abs(desired_x - current_x)
+
+            for each_move in range(space_between):
+                # each move counts the squares in between so it needs to not count from 0
+                each_move +=1
+                print(each_move)
+                
+                if desired_x < current_x:
+                    looking_at_x = current_x - each_move # moving left
+                else:
+                    looking_at_x = current_x + each_move # moving right
+
+
+                row = board[current_y -1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
+                if square == "__" and bad_color not in squares_in_between:
+                    too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                else:
+                    too_far = True
+                
+                
+                
+        elif current_x == desired_x:
+            # If moving vertically
+            space_between = abs(desired_y - current_y)
+
+            for each_move in range(space_between):
+                # each move counts the squares in between so it needs to not count from 0
+                each_move +=1
+
+                
+                if desired_y < current_y:
+                    looking_at_y = current_y - each_move # moving left
+                else:
+                    looking_at_y = current_y + each_move # moving right
+
+
+                row = board[looking_at_y-1]
+                square = row[current_x-1]
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
+                if square == "__" and bad_color not in squares_in_between:
+                    too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                else:
+                    too_far = True
+                
+
+    elif piece == "b": # bishop
+        
+        # we use incrementing x and y variables to look at all the possible move cordinates, until the cordinates we are looking at are full.
+        looking_at_x = 0
+        looking_at_y = 0
+        squares_in_between = []
+        distance =  abs(desired_y - current_y) # the distance on the x asis should be the same because bishops move in a 45 degree line
+        
+
+
+        if desired_y > current_y and desired_x > current_x:
+            for space_between in range(distance):
+                # If moving down-right
+                looking_at_x += space_between # x increases
+                looking_at_y += space_between # Y increases 
+                looking_at_pos = [looking_at_x, looking_at_y]
+
+                if looking_at_pos == desired_move:
+                    too_far = False
+                   
+
+        elif desired_y < current_y and desired_x < current_x:
+            for space_between in range(distance):
+                # If moving up-left
+                looking_at_x -= space_between  # x decreases
+                looking_at_y -= space_between # Y decreases 
+                looking_at_pos = [looking_at_x, looking_at_y]
+
+                if looking_at_pos == desired_move:
+                    too_far = False
+                    
+                
+                    
+        elif desired_y > current_y and desired_x < current_x:
+            for space_between in range(distance):    
+                # If moving down-left
+                looking_at_x -= space_between # x decreases
+                looking_at_y += space_between # Y increases 
+                looking_at_pos = [looking_at_x, looking_at_y]
+
+                if looking_at_pos == desired_move:
+                    too_far = False
+                    
+               
+                    
+        elif desired_y < current_y and desired_x > current_x:
+            for space_between in range(distance):
+                # If moving up-right
+                looking_at_x += space_between # x increases
+                looking_at_y -= space_between # Y decreases 
+                looking_at_pos = [looking_at_x, looking_at_y]
+
+                if looking_at_pos == desired_move:
+                    too_far = False
+                    
+                
+                    
 
     return too_far
 
