@@ -58,54 +58,50 @@ while True:
         allow_quit()
 
         if event.type == pygame.MOUSEBUTTONDOWN and holding_a_piece == False: # take a piece
-            
-            # we find the square clicked, then remove the piece on that square
-            target_piece = get_target()
 
-            what_you_clicked = target_piece[TARGET_PIECE_INDEX]
-            where_it_was = target_piece[TARGET_POS_INDEX]
+            # Player clicks a piece they want to move
+            chess_piece = get_target()
+            piece_name = chess_piece[TARGET_PIECE_INDEX]
+            piece_position = chess_piece[TARGET_POS_INDEX]
 
 
-            piece_to_be_removed = get_type_of_move(what_you_clicked, what_you_clicked) # For removing a piece from the board, the floating piece to be switched on the board needs to be an empty square
-
-            updated_chess_board = remove_piece(piece_to_be_removed, what_you_clicked, where_it_was, updated_chess_board)
-
-            # prevent taking an empty square and placing an empty square somewhere else, jsut in case the player starts the game by clicking on the empty board.
-            
+            # update the chess board by returning the changes made with the remove_piece funtion
+            updated_chess_board = remove_piece("__",piece_name, piece_position, updated_chess_board)
+            floating_piece_info = [piece_name, piece_position]
             holding_a_piece = True
-            piece_picked_up = what_you_clicked
-            
-
-
 
         elif event.type == pygame.MOUSEBUTTONDOWN and holding_a_piece == True: # place a piece
-            target_piece = get_target()
 
-            what_you_clicked = target_piece[TARGET_PIECE_INDEX]
-            where_it_was = target_piece[TARGET_POS_INDEX]
+            # Player clicks the square they want to move their piece too,
+            # but we must get the information of anything on that square already: "native"
+            chess_piece = get_target()
+            native_piece = chess_piece[TARGET_PIECE_INDEX]
+            new_position = chess_piece[TARGET_POS_INDEX]
+            
+            # Localizing the piece we moved last event frame.
+            moved_piece = floating_piece_info[TARGET_PIECE_INDEX]
+            moved_from = floating_piece_info[TARGET_POS_INDEX]
 
-            its_a_legal_move = allow_move(where_it_was, piece_picked_up, updated_chess_board)
 
-            if its_a_legal_move:
-                piece_to_be_removed = get_type_of_move(what_you_clicked, piece_picked_up) # For putting a piece back on the board, the floating piece needs to be different from what you just clicked.
+            # Make sure the player is placing the piece in a legal position.
+            it_is_a_legal_move = allow_move(moved_from, new_position, moved_piece, updated_chess_board)
 
-                updated_chess_board = remove_piece(piece_picked_up, what_you_clicked, where_it_was, updated_chess_board)
-                
-                #Play a sound
-                move.play()
+            if it_is_a_legal_move:
 
-                if target_piece == "_":
 
-                    holding_a_piece = False
-                    
+                # update the chess board by returning the changes made with the remove_piece funtion
+                updated_chess_board = remove_piece(moved_piece, native_piece, new_position, updated_chess_board)
 
-                piece_picked_up = piece_to_be_removed
-     # clear the piece that was taken after being placed
-          
+
+
+
+                # Clear out everthing
+                holding_a_piece = False # We; just put down the piece so we are no longer holding it
+                floating_piece_info = [] # clearing out any information we don't need anymore so it doesn't get in the way of the next click
+
 
     setup_board(updated_chess_board, screen)
     
     chess_board = updated_chess_board
     # Updates everything every frame.
     pygame.display.update()
-

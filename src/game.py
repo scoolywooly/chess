@@ -11,10 +11,10 @@ from global_variables import *
 def render_board(surface, current_state=[
         ["br","bn","bb","bq","bk","bb","bn","br"],
         ["bp","bp","bp","bp","bp","bp","bp","bp"],
-        ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
+        ["__","__","__","__","__","__","__","__",],
+        ["__","__","__","__","__","__","__","__",],
+        ["__","__","__","__","__","__","__","__",],
+        ["__","__","__","__","__","__","__","__",],
         ["wp","wp","wp","wp","wp","wp","wp","wp"],
         ["wr","wn","wb","wq","wk","wb","wn","wr"]
     ]):
@@ -33,7 +33,7 @@ def render_board(surface, current_state=[
             
 
             
-            cur_square_image = pygame.image.load("chess-images/" + col + ".png") # col refers to "wp" or "_" in the compound list above.
+            cur_square_image = pygame.image.load("chess-images/" + col + ".png") # col refers to "wp" or "__" in the compound list above.
             
 
             x_pos = [0, 100, 200, 300, 400, 500, 600, 700]
@@ -112,10 +112,10 @@ def square_clicked(mouse_pos, square_size=100):
 def piece_clicked(square, board=[
         ["br","bn","bb","bq","bk","bb","bn","br"],
         ["bp","bp","bp","bp","bp","bp","bp","bp"],
-        ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
+        ["__","__","__","__","__","__","__","__",],
+        ["__","__","__","__","__","__","__","__",],
+        ["__","__","__","__","__","__","__","__",],
+        ["__","__","__","__","__","__","__","__",],
         ["wp","wp","wp","wp","wp","wp","wp","wp"],
         ["wr","wn","wb","wq","wk","wb","wn","wr"]
     ]):
@@ -131,10 +131,10 @@ def piece_clicked(square, board=[
 def remove_piece(replace_with, replaced_piece=str, position=list, board=[
         ["br","bn","bb","bq","bk","bb","bn","br"],
         ["bp","bp","bp","bp","bp","bp","bp","bp"],
-        ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
-        ["_","_","_","_","_","_","_","_",],
+        ["__","__","__","__","__","__","__","__",],
+        ["__","__","__","__","__","__","__","__",],
+        ["__","__","__","__","__","__","__","__",],
+        ["__","__","__","__","__","__","__","__",],
         ["wp","wp","wp","wp","wp","wp","wp","wp"],
         ["wr","wn","wb","wq","wk","wb","wn","wr"]
     ]):
@@ -152,16 +152,16 @@ def remove_piece(replace_with, replaced_piece=str, position=list, board=[
     
     return board
 
-def get_type_of_move(initial_clicked_piece, floating_piece): # Floating piece would be the piece you are holding in your hand.
+def get_type_of_move(second_clicked_piece, floating_piece): # Floating piece would be the piece you are holding in your hand.
 
     # determines whether or not to replace the piece you are removing with blank space, or replace the piece that was moved, and prevents 
     # chess pieces to come back from the dead after they were captured because they were stored in a variable that should be cleared after 
     # every capture.
-    if initial_clicked_piece and floating_piece == "_": # If I'm moving a piece to an empty square I'm clicking on "_"
-        replacement_png = initial_clicked_piece
+    if second_clicked_piece and floating_piece == "__": # If I'm moving a piece to an empty square I'm clicking on "__"
+        replacement_png = second_clicked_piece
 
-    elif initial_clicked_piece and floating_piece != "_": # If I'm capturing a piece then I click on it and it's remvoed from the board, and added to a removed pieces list.
-        replacement_png = "_"
+    elif second_clicked_piece and floating_piece != "__": # If I'm capturing a piece then I click on it and it's remvoed from the board, and added to a removed pieces list.
+        replacement_png = "__"
         
 
     else: # Otherwise just replace what was moved from a chess square with an empty chess square.
@@ -185,6 +185,9 @@ def get_color(piece):
 def get_type(piece):
     parsed_name = list(piece)
     return parsed_name[TARGET_TYPE_INDEX]
+
+def all_same_list(my_list):
+    return all(same_value == my_list[0] for same_value in my_list)
 
 def check_if_controlled(controlling_color=str, desired_move=list):
     """All squares controlled by a piece that prevents a king from moving there, is stored in a dictionary"""
@@ -215,9 +218,180 @@ def check_if_occupied_by_us(my_color=str, desired_move=list, board=list):
     
     return is_occupied
 
+def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
+    ["br","bn","bb","bq","bk","bb","bn","br"],
+    ["bp","bp","bp","bp","bp","bp","bp","bp"],
+    ["__","__","__","__","__","__","__","__",],
+    ["__","__","__","__","__","__","__","__",],
+    ["__","__","__","__","__","__","__","__",],
+    ["__","__","__","__","__","__","__","__",],
+    ["wp","wp","wp","wp","wp","wp","wp","wp"],
+    ["wr","wn","wb","wq","wk","wb","wn","wr"]
+    ]):
+    too_far = True # Defaults to true, so i don't have to write so many else statements.
 
 
-def allow_move(desired_move=list, piece=str, board=list):
+    parsed_name = list(chess_piece)
+    piece = parsed_name[TARGET_TYPE_INDEX]
+    color = parsed_name[TARGET_PIECE_INDEX]
+    bad_color = "b" if color == "w" else "w"
+    current_x = current_position[X_INDEX]
+    current_y = current_position[Y_INDEX]
+    desired_x = desired_move[X_INDEX]
+    desired_y = desired_move[Y_INDEX]
+
+    
+    # Checking if the move will actually be a capture move
+    def capture_enemy(at_x, at_y, board):
+        enemey_at = False
+        row = board[at_y-1]
+        square = row[at_x-1]
+        get_color = list(square)
+
+        if get_color[TARGET_PIECE_INDEX] != color:
+            enemey_at = True
+        else:
+            enemey_at = False
+
+        return enemey_at
+    
+
+
+    if piece == "k": # king
+        reach = 1
+
+        horizantil_moves = [current_x + reach, current_x, current_x - reach]
+        verticial_moves = [current_y + reach, current_y, current_y - reach]
+
+        if desired_y in verticial_moves:
+            if desired_x in horizantil_moves:
+                too_far = False
+        
+    elif piece == "p": # pawn
+        reach = 1 # FOR NOW
+        horizantil_moves = [current_x + reach, current_x, current_x - reach] # If I didn't check vertical first, this would allow the pawn to move sideways
+        verticial_moves = [current_y - 1] if color == "w" else [current_y + 1] # the built in if statement controls whether or not it's black or white.
+
+        if desired_y in verticial_moves:
+            if desired_x in horizantil_moves:
+                too_far = False
+   
+    elif piece == "n": # knight
+        
+        
+        up = 2 # Directions to make an L shape
+        down = -2
+        left = -2
+        right = 2
+        up_increment = 1
+        down_increment = -1
+        left_increment = 1
+        right_increment = -1
+
+        # chekcing for hte exact position of the desired X and Y in relation to the current position
+        if current_y + up == desired_y: # First level, we check the general direction
+            if current_x + right_increment == desired_x: # Second level, we move over by one or negative one
+                too_far = False
+            
+            elif current_x + left_increment == desired_x:
+                too_far = False
+
+        elif current_y + down == desired_y: # First level, we check the general direction
+            if current_x + right_increment == desired_x: # Second level, we move over by one or negative one
+                too_far = False
+            
+            elif current_x + left_increment == desired_x:
+                too_far = False
+        elif current_x + right == desired_x: # First level, we check the general direction
+            if current_y + up_increment == desired_y: # Second level, we move over by one or negative one
+                too_far = False
+            
+            elif current_y + down_increment == desired_y:
+                too_far = False
+        elif current_x + left == desired_x: # First level, we check the general direction
+            if current_y + up_increment == desired_y: # Second level, we move over by one or negative one
+                too_far = False
+            
+            elif current_y + down_increment == desired_y:
+                too_far = False
+        else:
+            too_far = True    
+
+    elif piece == "r": # rook
+
+        # we use incrementing x and y variables to look at all the possible move cordinates, until the cordinates we are looking at are full.
+        looking_at_x = 0
+        looking_at_y = 0
+        squares_in_between = []
+
+
+        if desired_y == current_y:
+            # If moving horizantilly
+            space_between = abs(desired_x - current_x)
+
+            for each_move in range(space_between):
+                # each move counts the squares in between so it needs to not count from 0
+                each_move +=1
+                print(each_move)
+                
+                if desired_x < current_x:
+                    looking_at_x = current_x - each_move # moving left
+                else:
+                    looking_at_x = current_x + each_move # moving right
+
+
+                row = board[current_y -1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
+                if square == "__" and bad_color not in squares_in_between:
+                    too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                else:
+                    too_far = True
+                
+                
+        elif current_x == desired_x:
+            # If moving vertically
+            space_between = abs(desired_y - current_y)
+
+            for each_move in range(space_between):
+                # each move counts the squares in between so it needs to not count from 0
+                each_move +=1
+
+                
+                if desired_y < current_y:
+                    looking_at_y = current_y - each_move # moving left
+                else:
+                    looking_at_y = current_y + each_move # moving right
+
+
+                row = board[looking_at_y-1]
+                square = row[current_x-1]
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
+                if square == "__" and bad_color not in squares_in_between:
+                    too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                else:
+                    too_far = True
+                
+
+    return too_far
+
+def allow_move(current_position, desired_move=list, piece=str, board=list):
         # desired_move is the x and y position of which square the mouse clicked after selecting a piece, but it won't go through
         # with moving the piece there if desired_move is occupied by a piece of the current player's own color, or if the piece
         # intended to be moved is a king and the desired_move is controlled.
@@ -231,39 +405,27 @@ def allow_move(desired_move=list, piece=str, board=list):
         opposing_color = "b"
     elif my_color == "b":
         opposing_color = "w"
-    else:
-        print("You are trying to check if an empty square can move!")
+   
+
+
 
     # Check if one of our own pieces is there already
     its_occupied_by_us = check_if_occupied_by_us(my_color,desired_move,board)
 
+
+
+
     # Check if we are trying to move a king, if so--then we need to make sure the square isn't controlled by the enemey.
-    check_is_king = parced_piece_str[TARGET_TYPE_INDEX]
+    its_a_king = parced_piece_str[TARGET_TYPE_INDEX]
 
-    """It works until you put the piece picked up bacck, and then it looks to see if there is a second character in the empty piece which their isn't
-    So I need to rename all instances of empty square from '_' to '__' and then add a conditional statement at line 234 to see if the second character is '_', 
-    and then let the allow_move to return true-letting the player put the piece back"""
+    its_out_of_range = too_far_away(piece, current_position, desired_move, board)
 
+    if its_occupied_by_us or its_out_of_range:
+        allowed = False
 
-
-    if check_is_king == "k":
-        its_controlled = check_if_controlled(opposing_color, desired_move)
     
-        if its_controlled or its_occupied_by_us:
-            allowed = False
 
-        elif its_controlled and its_occupied_by_us:
-            allowed = False
 
-        elif its_occupied_by_us == False and its_occupied_by_us == False:
-            allowed = True
-
-    elif check_is_king != "k": # If I am any other piece than a King...
-
-        # Since its not the king, the only thing we have to worry about is if the square is occupied by our own piece
-        if its_occupied_by_us:
-            allowed = False
-            allowed = False
 
     """The conditional logic for checking a king goes here goes here.
     It will determine if the King's position is controlled by the enemey, 
