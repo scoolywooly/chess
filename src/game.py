@@ -5,9 +5,6 @@ import pygame
 from const import *
 from global_variables import *
 
-
-
-# Low Abstraction
 def render_board(surface, current_state=[
         ["br","bn","bb","bq","bk","bb","bn","br"],
         ["bp","bp","bp","bp","bp","bp","bp","bp"],
@@ -46,8 +43,6 @@ def render_board(surface, current_state=[
             cur_square_x_pos += 1
         cur_square_y_pos += 1
     
-   
-
 def setup_board(board, surface, dark_square=(73, 120, 163), light_square=(212, 224, 197)):
 
     # The Board
@@ -167,7 +162,6 @@ def get_type_of_move(second_clicked_piece, floating_piece): # Floating piece wou
     else: # Otherwise just replace what was moved from a chess square with an empty chess square.
         replacement_png = floating_piece
     return replacement_png
-
 
 def get_target():
     click_location = get_mouse_pos()
@@ -332,7 +326,7 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
             for each_move in range(space_between):
                 # each move counts the squares in between so it needs to not count from 0
                 each_move +=1
-                print(each_move)
+                
                 
                 if desired_x < current_x:
                     looking_at_x = current_x - each_move # moving left
@@ -351,10 +345,14 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                     too_far = False
                 elif square_color == bad_color:
                     too_far = False
+                elif square_color == color:
+                    too_far = True
                 elif square == "__" and bad_color in squares_in_between:
                     too_far = True
                 elif square == "__" and color in squares_in_between:
                     too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
                 else:
                     too_far = True
                 
@@ -385,8 +383,14 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                     too_far = False
                 elif square_color == bad_color:
                     too_far = False
+                elif square_color == color:
+                    too_far = True
                 elif square == "__" and bad_color in squares_in_between:
                     too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
                 else:
                     too_far = True
                 
@@ -396,7 +400,7 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
         looking_at_x = 0
         looking_at_y = 0
         squares_in_between = []
-
+        distance = abs(desired_y - current_y)
 
         if desired_y == current_y:
             # If moving horizantilly
@@ -405,7 +409,7 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
             for each_move in range(space_between):
                 # each move counts the squares in between so it needs to not count from 0
                 each_move +=1
-                print(each_move)
+                
                 
                 if desired_x < current_x:
                     looking_at_x = current_x - each_move # moving left
@@ -424,10 +428,14 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                     too_far = False
                 elif square_color == bad_color:
                     too_far = False
+                elif square_color == color:
+                    too_far = True
                 elif square == "__" and bad_color in squares_in_between:
                     too_far = True
                 elif square == "__" and color in squares_in_between:
                     too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
                 else:
                     too_far = True
                 
@@ -459,13 +467,168 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                     too_far = False
                 elif square_color == bad_color:
                     too_far = False
+                elif square_color == color:
+                    too_far = True
                 elif square == "__" and bad_color in squares_in_between:
                     too_far = True
                 elif square == "__" and color in squares_in_between:
                     too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
                 else:
                     too_far = True
+        elif desired_y > current_y and desired_x > current_x:
+            looking_at_x = current_x
+            looking_at_y = current_y
+            for space_between in range(distance):
+                # If moving down-right
+                looking_at_x += 1 # x increases
+                looking_at_y += 1 # Y increases 
                 
+
+                row = board[looking_at_y - 1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
+
+
+                if looking_at_x != desired_x and looking_at_y != desired_y:
+                    too_far = True
+                #elif looking_at_x == desired_x and looking_at_y == desired_y:
+                elif square == "__" and bad_color not in squares_in_between:
+                    too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square_color == color:
+                    too_far = True
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
+                else:
+                    too_far = True    
+                    
+
+        elif desired_y < current_y and desired_x < current_x:
+            looking_at_x = current_x
+            looking_at_y = current_y
+            for space_between in range(distance):
+                # If moving up-left
+                looking_at_x -= 1  # x decreases
+                looking_at_y -= 1 # Y decreases 
+                
+
+                row = board[looking_at_y -1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
+
+                if looking_at_x != desired_x and looking_at_y != desired_y:
+                    too_far = True
+                #elif looking_at_x == desired_x and looking_at_y == desired_y:
+                elif square == "__" and bad_color not in squares_in_between:
+                    too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square_color == color:
+                    too_far = True
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
+                else:
+                    too_far = True
+                 
+                    
+                    
+                    
+                
+                    
+        elif desired_y > current_y and desired_x < current_x:
+            looking_at_x = current_x
+            looking_at_y = current_y
+            for space_between in range(distance):    
+                # If moving down-left
+                looking_at_x -= 1 # x decreases
+                looking_at_y += 1 # Y increases 
+                
+
+
+                row = board[looking_at_y -1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
+
+                if looking_at_x != desired_x and looking_at_y != desired_y:
+                    too_far = True
+                #elif looking_at_x == desired_x and looking_at_y == desired_y:
+                elif square == "__" and bad_color not in squares_in_between:
+                    too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square_color == color:
+                    too_far = True
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
+                else:
+                    too_far = True
+                    
+                    
+                    
+               
+                    
+        elif desired_y < current_y and desired_x > current_x:
+            looking_at_x = current_x
+            looking_at_y = current_y
+            for space_between in range(distance):
+                # If moving up-right
+                looking_at_x += 1 # x increases
+                looking_at_y -= 1 # Y decreases 
+                
+                """I will have to write a function that pulls what 'looking_at' can see, and then upload it to the controlled squares"""
+
+                row = board[looking_at_y -1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
+
+                if looking_at_x != desired_x and looking_at_y != desired_y:
+                    too_far = True
+                #elif looking_at_x == desired_x and looking_at_y == desired_y:
+                elif square == "__" and bad_color not in squares_in_between:
+                    too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square_color == color:
+                    too_far = True
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
+                else:
+                    too_far = True
 
     elif piece == "b": # bishop
         
@@ -482,12 +645,34 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                 # If moving down-right
                 looking_at_x += 1 # x increases
                 looking_at_y += 1 # Y increases 
-                print([looking_at_x,looking_at_y])
+                
+
+                row = board[looking_at_y - 1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
+
 
                 if looking_at_x != desired_x and looking_at_y != desired_y:
                     too_far = True
-                else:
+                #elif looking_at_x == desired_x and looking_at_y == desired_y:
+                elif square == "__" and bad_color not in squares_in_between:
                     too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square_color == color:
+                    too_far = True
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
+                else:
+                    too_far = True    
                     
 
         elif desired_y < current_y and desired_x < current_x:
@@ -495,12 +680,35 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                 # If moving up-left
                 looking_at_x -= 1  # x decreases
                 looking_at_y -= 1 # Y decreases 
-                looking_at_pos = [looking_at_x, looking_at_y]
+                
+
+                row = board[looking_at_y -1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
 
                 if looking_at_x != desired_x and looking_at_y != desired_y:
                     too_far = True
-                else:
+                #elif looking_at_x == desired_x and looking_at_y == desired_y:
+                elif square == "__" and bad_color not in squares_in_between:
                     too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square_color == color:
+                    too_far = True
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
+                else:
+                    too_far = True
+                 
+                    
                     
                     
                 
@@ -510,12 +718,35 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                 # If moving down-left
                 looking_at_x -= 1 # x decreases
                 looking_at_y += 1 # Y increases 
-                looking_at_pos = [looking_at_x, looking_at_y]
+                
+
+
+                row = board[looking_at_y -1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
 
                 if looking_at_x != desired_x and looking_at_y != desired_y:
                     too_far = True
-                else:
+                #elif looking_at_x == desired_x and looking_at_y == desired_y:
+                elif square == "__" and bad_color not in squares_in_between:
                     too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square_color == color:
+                    too_far = True
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
+                else:
+                    too_far = True
+                    
                     
                     
                
@@ -525,12 +756,35 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                 # If moving up-right
                 looking_at_x += 1 # x increases
                 looking_at_y -= 1 # Y decreases 
-                looking_at_pos = [looking_at_x, looking_at_y]
+                
+                """I will have to write a function that pulls what 'looking_at' can see, and then upload it to the controlled squares"""
+
+                row = board[looking_at_y -1]
+                square = row[looking_at_x -1] # getting the square we are currently looking at
+                square_color = list(square)
+                square_color = square_color[0]
+
+                squares_in_between.append(square_color)
+
 
                 if looking_at_x != desired_x and looking_at_y != desired_y:
                     too_far = True
-                else:
+                #elif looking_at_x == desired_x and looking_at_y == desired_y:
+                elif square == "__" and bad_color not in squares_in_between:
                     too_far = False
+                elif square_color == bad_color:
+                    too_far = False
+                elif square_color == color:
+                    too_far = True
+                elif square == "__" and bad_color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color in squares_in_between:
+                    too_far = True
+                elif square == "__" and color not in squares_in_between:
+                    too_far = False
+                else:
+                    too_far = True
+                
                     
                     
                 
