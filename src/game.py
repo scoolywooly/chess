@@ -1,4 +1,6 @@
-# I did this file all by myself!
+# I did this file all by myself with some research done at W3schools, 
+# and the occasionaly reminder of how list methods worked from Microsoft Codepiliot. All code is my own unless I state otherwise in a comment.
+
 import math
 import os
 import pygame
@@ -194,7 +196,7 @@ def compare_lists(list_a, list_b): # Aided with some research done with Microsof
     
     return match
 
-def can_see_square(piece, square_pos, board):
+def add_can_see_square(piece, square_pos, board):
     # I need to see what kind of piece is there. King, Queen, Knight, Pawn etc.
     # I need to see what side the piece is on. White or Black?
     on_square = list(piece)
@@ -212,7 +214,7 @@ def can_see_square(piece, square_pos, board):
         
         
 
-        return can_see_square
+        return can_see
     
     elif type_on_square == "r": # rook can see
         
@@ -767,16 +769,8 @@ def allow_move(current_position, desired_move=list, piece=str, board=list):
     elif my_color == "b":
         opposing_color = "w"
    
-
-
-
     # Check if one of our own pieces is there already
     its_occupied_by_us = check_if_occupied_by_us(my_color,desired_move,board)
-
-
-
-
-
 
     its_out_of_range = too_far_away(piece, current_position, desired_move, board)
 
@@ -793,7 +787,8 @@ def allow_move(current_position, desired_move=list, piece=str, board=list):
 
     
 
-
+    # I ran out of time in this assignment to do the checking or the AI bot, so this project must be and is a literal digital chess board, 
+    # made for co-op where both players know the basic rules of Chess and the win conditions of the game.
 
     """The conditional logic for checking a king goes here goes here.
     It will determine if the King's position is controlled by the enemey, 

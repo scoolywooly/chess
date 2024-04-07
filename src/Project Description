@@ -1,0 +1,70 @@
+"Digital Chess Board" By Benjamin Brinkerhoff
+
+Revised Aim: Create Chess for players who are already familiar to the basic rules (who goes 
+first, checking, and win condition of the game) of the game and can play on the same computer.
+
+Original Aim: Creat a fully functional Chess Bot to play against the player. This project aim had to be canceled, as a few weeks was
+            clearly not enough time to learn how to implement AI on a project that was as complex as this.
+
+
+Documentation read and videos watched:
+https://www.youtube.com/watch?v=AY9MnQ4x3zk&t=1340s This video taught me how to use pygame.
+
+I also curated a playlist prior to officially workign on the project for inspiration and I even got 
+a few ideas that made it to the actual project,like for example: computing the 
+chess_board as a list, with each entry in the list being a string sharing the same name as the png image they would represent.
+
+https://www.youtube.com/playlist?list=PLenVNnuAzv8daUvTMVYeU4XkxT5HOZTt3
+
+I would listen to this playlist while at work, to help me get a better understanding of the giant I was facing, however, in the end I decided to only rely on Documentation from w3schools.com
+and reasearch done by Microsoft Co-Piliot. I used the chat-bot to remind me on how certain dictionary and list methods worked.
+For example: If I wanted to know whether or not "for i in range(x)" would count from 0 or 1.
+
+
+Names of Functions (get ready its a long list, I don't envy you TA):
+
+render_board
+setup_board
+get_mouse_pos
+square_clicked
+piece_clicked
+remove_piece
+get_type_of_move
+get_target
+get_color
+get_type
+all_same_list
+compare_lists
+add_can_see_square
+check_if_controlled
+check_if_occupied_by_us
+too_far_away
+allow_move
+allow_quit
+
+These functions are defined in the game.py file, where the actual logic used by the main.py file is used
+
+
+Pie Testing Functions (most of the functions in the list above, are too complex to test with pytest, 
+although they still technically only do one task):
+
+test_square_clicked()
+test_piece_clicked()
+test_get_color()
+
+
+Description of the work:
+YIKES! Did I shoot myself with this one? Yes. Yes, I did. I spent the entire day on friday of this week just trying
+to disable illegal moves, and I was able to do so--mostly. Which is why I had to add the clause in the revised aim, 
+that the players will need a bsic understanding of the rules. This week, I mostly had to define each move a piece can make at any given time 
+this required a tone of if statements and totalled to like 300 - 400 lines of code, all just to do one thing: look for legal moves.
+That was definately the hardest part of this whole project, while the second hardest was looking for sprites that I could render at this resolution.
+Then there was rendering everything on a list, where the whole game is actually just shuffling strings from different positions around on the list, then rendering the whole list
+after the changes. 
+
+To Play the game, you just click a piece, then click the square you want it to move. Apply the basic rules of chess, just like you would with a real chess board.
+If the move is considered illegal, then the piece will go right back to where it was. The only illegal move i didn't have time to cover was making sure a piece cannot jump over another unless its a knight, oh and a pawn can only move one square at a time. If wI had another week, I could probably implement all this, but its fianls and we were all told to expect having to cut down on our expectations for our programs, but in the end my expectations for what I could achieve with a simple text editor and basic knowledge of programming languages has been far surpassed.
+So yeah, I had to cut down on my expectations, but I'm still extremely impressed as this is the biggest thing I've ever done in programmign to date!
+
+
+Definitely my favorite class here at BYU-I so far.

@@ -71,11 +71,11 @@ def main(updated_chess_board, holding_a_piece, mouse_pos,):
 
                     # update the chess board by returning the changes made with the remove_piece funtion
                     updated_chess_board = remove_piece(moved_piece, native_piece, new_position, updated_chess_board)
-                    updated_control_dictionary = can_see_square(moved_piece, new_position, updated_chess_board)
-
+                    
                 else: # If it isn't a legal move, then put the piece back where it came from.
                     updated_chess_board = remove_piece(moved_piece, "__", moved_from, updated_chess_board)
-                    can_see_square(moved_piece, new_position, updated_chess_board)
+                    
+                    
                 holding_a_piece = False # We; just put down the piece so we are no longer holding it
                 floating_piece_info = []    
 
