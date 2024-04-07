@@ -183,6 +183,262 @@ def get_type(piece):
 def all_same_list(my_list):
     return all(same_value == my_list[0] for same_value in my_list)
 
+def compare_lists(list_a, list_b): # Aided with some research done with Microsoft Co-Piliot
+    match = False
+
+    for index in range(len(list_a)):
+        if list_a[index] == list_b[index]:
+            match = True
+        else:
+            match = False
+    
+    return match
+
+def can_see_square(piece, square_pos, board):
+    # I need to see what kind of piece is there. King, Queen, Knight, Pawn etc.
+    # I need to see what side the piece is on. White or Black?
+    on_square = list(piece)
+    color_on_square = on_square[TARGET_PIECE_INDEX]
+    type_on_square = on_square[TARGET_TYPE_INDEX]
+    square_x = square_pos[X_INDEX]
+    square_y = square_pos[Y_INDEX]
+    can_see = [] # Squares that can be seen by the piece on that square will be added here, and then sent to the controlled squares dictionary
+
+    if type_on_square == "k": # king can see
+        reach = 1
+        can_see = [[square_x + reach, square_y], [square_x, square_y], [square_x - reach, square_y],
+                   [square_x + reach, square_y + reach], [square_x, square_y + reach], [square_x - reach, square_y + reach],
+                   [square_x + reach, square_y - reach], [square_x, square_y - reach], [square_x - reach, square_y - reach]]
+        
+        
+
+        return can_see_square
+    
+    elif type_on_square == "r": # rook can see
+        
+        look_at_x = square_x
+        look_at_y = square_y
+        
+
+        distance_right = COL - square_x
+        distance_left = square_x - 1
+        distance_down = ROWS - square_y
+        distance_up = square_y - 1
+
+        total_reach = distance_right + distance_left + distance_down + distance_up
+        current_direction = 0
+
+
+        # adding the squares to the right to can_see list
+        for squares_seen in range(total_reach):
+            can_see.append([look_at_x, look_at_y])
+            
+            
+            if current_direction == 0: # Looking Right
+                look_at_x += 1
+            elif current_direction == 1: # Looking Left
+                look_at_x -= 1
+            elif current_direction == 2: # Looking Down
+                look_at_y += 1
+            elif current_direction == 3: # Looking Up
+                look_at_y -= 1
+
+            
+
+            # change direction
+            if squares_seen == distance_right: # done looking right, switch to left
+                current_direction += 1
+                look_at_x = square_x - 1
+
+            elif squares_seen == distance_left + distance_right: # done looking right and left
+                current_direction += 1
+                look_at_x = square_x
+                look_at_y = square_y + 1
+
+            elif squares_seen == distance_left + distance_down + distance_right: # done looking right, left, and down; switch to up
+                current_direction += 1
+                look_at_y = square_y + 1
+                look_at_x = square_x
+            else:
+                pass # current direciton is only updated if we have looked at the 
+
+    elif type_on_square == "b": # bishop can see
+        look_at_x = square_x
+        look_at_y = square_y
+
+
+        distance_down_right = COL - square_x
+        distance_down_left = ROWS - square_y
+        distance_up_left = square_x - 1
+        distance_up_right = square_y - 1
+        # We define the ammount of iterations the for loop has too run
+
+        total_reach = distance_down_right + distance_up_left + distance_down_left + distance_up_right
+
+        direction = 0
+
+        for squares_seen in range(total_reach): # starts with down-right
+            can_see.append([look_at_x, look_at_y])
+
+            if direction == 0: # down-right
+                look_at_x += 1
+                look_at_y += 1
+            elif direction == 1: # down-left
+                look_at_x -= 1
+                look_at_y += 1
+            elif direction == 2: # up-left
+                look_at_x -= 1
+                look_at_y -= 1
+            elif direction == 3: #up-right
+                look_at_x += 1
+                look_at_y -= 1
+            
+            if squares_seen == distance_down_right: # switch to down-left
+                direction += 1
+                look_at_x = square_x - 1
+                look_at_y = square_y + 1
+
+            elif squares_seen == distance_down_right + distance_down_left: # switch to up-left
+                direction += 1
+                look_at_x = square_x - 1
+                look_at_y = square_y - 1
+
+            elif squares_seen == distance_down_right + distance_down_left + distance_up_left: # switch to up-right
+                direction += 1
+                look_at_x = square_x + 1
+                look_at_y = square_y - 1
+            
+            else:
+                pass
+    
+    elif type_on_square == "q": # queen can see
+            
+        look_at_x = square_x
+        look_at_y = square_y
+        
+
+        distance_right = COL - square_x
+        distance_left = square_x - 1
+        distance_down = ROWS - square_y
+        distance_up = square_y - 1
+
+        total_reach = distance_right + distance_left + distance_down + distance_up
+        current_direction = 0
+
+
+        # adding the squares to the right to can_see list
+        for squares_seen in range(total_reach):
+            can_see.append([look_at_x, look_at_y])
+            
+            
+            if current_direction == 0: # Looking Right
+                look_at_x += 1
+            elif current_direction == 1: # Looking Left
+                look_at_x -= 1
+            elif current_direction == 2: # Looking Down
+                look_at_y += 1
+            elif current_direction == 3: # Looking Up
+                look_at_y -= 1
+
+            
+
+            # change direction
+            if squares_seen == distance_right: # done looking right, switch to left
+                current_direction += 1
+                look_at_x = square_x - 1
+
+            elif squares_seen == distance_left + distance_right: # done looking right and left
+                current_direction += 1
+                look_at_x = square_x
+                look_at_y = square_y + 1
+
+            elif squares_seen == distance_left + distance_down + distance_right: # done looking right, left, and down; switch to up
+                current_direction += 1
+                look_at_y = square_y + 1
+                look_at_x = square_x
+            else:
+                pass # current direciton is only updated if we have looked at the 
+        direction = 0
+        look_at_x = square_x
+        look_at_y = square_y
+
+        # Add the Bishop range of movement
+        for squares_seen in range(total_reach): # starts with down-right
+            can_see.append([look_at_x, look_at_y])
+
+            if direction == 0: # down-right
+                look_at_x += 1
+                look_at_y += 1
+            elif direction == 1: # down-left
+                look_at_x -= 1
+                look_at_y += 1
+            elif direction == 2: # up-left
+                look_at_x -= 1
+                look_at_y -= 1
+            elif direction == 3: #up-right
+                look_at_x += 1
+                look_at_y -= 1
+            
+            if squares_seen == distance_down_right: # switch to down-left
+                direction += 1
+                look_at_x = square_x - 1
+                look_at_y = square_y + 1
+
+            elif squares_seen == distance_down_right + distance_down_left: # switch to up-left
+                direction += 1
+                look_at_x = square_x - 1
+                look_at_y = square_y - 1
+
+            elif squares_seen == distance_down_right + distance_down_left + distance_up_left: # switch to up-right
+                direction += 1
+                look_at_x = square_x + 1
+                look_at_y = square_y - 1
+            
+            else:
+                pass
+
+    elif type_on_square == "n": # knight can see
+        look_at_x = square_x
+        look_at_y = square_y
+
+        up = 2 # Directions to make an L shape
+        down = -2
+        left = -2
+        right = 2
+        up_increment = 1
+        down_increment = -1
+        left_increment = 1
+        right_increment = -1
+
+         
+
+        move_1 = [look_at_x + right, look_at_y + up_increment]
+        move_2 = [look_at_x + right, look_at_y + down_increment]
+        move_3 = [look_at_x + left, look_at_y + up_increment]
+        move_4 = [look_at_x + left, look_at_y + down_increment]
+
+        move_5 = [look_at_x + left_increment, look_at_y + up]
+        move_6 = [look_at_x + right_increment, look_at_y + up]
+        move_7 = [look_at_x + left_increment, look_at_y + down]
+        move_8 = [look_at_x + right_increment, look_at_y + down]
+        
+
+        can_see.append([move_1,move_2,move_3,move_4,move_5,move_6,move_7,move_8])
+
+    elif type_on_square == "p": # pawn can see
+        look_at_x = square_x
+        look_at_y = square_y
+        
+        # now it becomes important to know which color the pawn is
+        if color_on_square == "w":
+            can_see.append([look_at_x + 1, look_at_y - 1],[look_at_x - 1, look_at_y - 1])
+        else:
+            can_see.append([look_at_x + 1, look_at_y + 1],[look_at_x - 1, look_at_y + 1])
+               
+    
+    can_see.remove(square_pos) # makes sure that the piece doesn't control it's own square so that the opposing king can still capture it
+    return can_see
+
 def check_if_controlled(controlling_color=str, desired_move=list):
     """All squares controlled by a piece that prevents a king from moving there, is stored in a dictionary"""
     is_off_limits = False
@@ -199,8 +455,10 @@ def check_if_controlled(controlling_color=str, desired_move=list):
 def check_if_occupied_by_us(my_color=str, desired_move=list, board=list):
     is_occupied = False # Defaults to false
 
+    """I will make lines 214 and 2215 be equal to whether or not the piece is looking at it using the can_look_at() function instead of only
+    the desired move."""
     check_x = desired_move[X_INDEX] - 1 # I have to minus 1, because I log the piece's postion counting from 1,
-    check_y = desired_move[Y_INDEX] - 1 # counting from 1, whereas python counts from 0
+    check_y = desired_move[Y_INDEX] - 1 # counting from 1, whereas python counts from 0 
 
     row = board[check_y]
     desired_square = row[check_x]
@@ -233,22 +491,6 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
     current_y = current_position[Y_INDEX]
     desired_x = desired_move[X_INDEX]
     desired_y = desired_move[Y_INDEX]
-
-    
-    # Checking if the move will actually be a capture move
-    def capture_enemy(at_x, at_y, board):
-        enemey_at = False
-        row = board[at_y-1]
-        square = row[at_x-1]
-        get_color = list(square)
-
-        if get_color[TARGET_PIECE_INDEX] != color:
-            enemey_at = True
-        else:
-            enemey_at = False
-
-        return enemey_at
-    
 
 
     if piece == "k": # king
@@ -402,7 +644,16 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
         squares_in_between = []
         distance = abs(desired_y - current_y)
 
-        if desired_y == current_y:
+        # Do some math to findout what are the possible moves using the current_position, and the desired_position
+        distance_x = abs(desired_x - current_x)
+        distance_y = abs(desired_y - current_y)
+
+        if distance_x == distance_y:
+            """If the move is not diagnol from the starting square, then"""
+            too_far = False
+        
+
+        elif desired_y == current_y:
             # If moving horizantilly
             space_between = abs(desired_x - current_x)
 
@@ -477,326 +728,35 @@ def too_far_away(chess_piece, current_position=str, desired_move=list, board=[
                     too_far = False
                 else:
                     too_far = True
-        elif desired_y > current_y and desired_x > current_x:
-            looking_at_x = current_x
-            looking_at_y = current_y
-            for space_between in range(distance):
-                # If moving down-right
-                looking_at_x += 1 # x increases
-                looking_at_y += 1 # Y increases 
-                
-
-                row = board[looking_at_y - 1]
-                square = row[looking_at_x -1] # getting the square we are currently looking at
-                square_color = list(square)
-                square_color = square_color[0]
-
-                squares_in_between.append(square_color)
-
-
-
-                if looking_at_x != desired_x and looking_at_y != desired_y:
-                    too_far = True
-                #elif looking_at_x == desired_x and looking_at_y == desired_y:
-                elif square == "__" and bad_color not in squares_in_between:
-                    too_far = False
-                elif square_color == bad_color:
-                    too_far = False
-                elif square_color == color:
-                    too_far = True
-                elif square == "__" and bad_color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color not in squares_in_between:
-                    too_far = False
-                else:
-                    too_far = True    
-                    
-
-        elif desired_y < current_y and desired_x < current_x:
-            looking_at_x = current_x
-            looking_at_y = current_y
-            for space_between in range(distance):
-                # If moving up-left
-                looking_at_x -= 1  # x decreases
-                looking_at_y -= 1 # Y decreases 
-                
-
-                row = board[looking_at_y -1]
-                square = row[looking_at_x -1] # getting the square we are currently looking at
-                square_color = list(square)
-                square_color = square_color[0]
-
-                squares_in_between.append(square_color)
-
-
-                if looking_at_x != desired_x and looking_at_y != desired_y:
-                    too_far = True
-                #elif looking_at_x == desired_x and looking_at_y == desired_y:
-                elif square == "__" and bad_color not in squares_in_between:
-                    too_far = False
-                elif square_color == bad_color:
-                    too_far = False
-                elif square_color == color:
-                    too_far = True
-                elif square == "__" and bad_color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color not in squares_in_between:
-                    too_far = False
-                else:
-                    too_far = True
-                 
-                    
-                    
-                    
-                
-                    
-        elif desired_y > current_y and desired_x < current_x:
-            looking_at_x = current_x
-            looking_at_y = current_y
-            for space_between in range(distance):    
-                # If moving down-left
-                looking_at_x -= 1 # x decreases
-                looking_at_y += 1 # Y increases 
-                
-
-
-                row = board[looking_at_y -1]
-                square = row[looking_at_x -1] # getting the square we are currently looking at
-                square_color = list(square)
-                square_color = square_color[0]
-
-                squares_in_between.append(square_color)
-
-
-                if looking_at_x != desired_x and looking_at_y != desired_y:
-                    too_far = True
-                #elif looking_at_x == desired_x and looking_at_y == desired_y:
-                elif square == "__" and bad_color not in squares_in_between:
-                    too_far = False
-                elif square_color == bad_color:
-                    too_far = False
-                elif square_color == color:
-                    too_far = True
-                elif square == "__" and bad_color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color not in squares_in_between:
-                    too_far = False
-                else:
-                    too_far = True
-                    
-                    
-                    
-               
-                    
-        elif desired_y < current_y and desired_x > current_x:
-            looking_at_x = current_x
-            looking_at_y = current_y
-            for space_between in range(distance):
-                # If moving up-right
-                looking_at_x += 1 # x increases
-                looking_at_y -= 1 # Y decreases 
-                
-                """I will have to write a function that pulls what 'looking_at' can see, and then upload it to the controlled squares"""
-
-                row = board[looking_at_y -1]
-                square = row[looking_at_x -1] # getting the square we are currently looking at
-                square_color = list(square)
-                square_color = square_color[0]
-
-                squares_in_between.append(square_color)
-
-
-                if looking_at_x != desired_x and looking_at_y != desired_y:
-                    too_far = True
-                #elif looking_at_x == desired_x and looking_at_y == desired_y:
-                elif square == "__" and bad_color not in squares_in_between:
-                    too_far = False
-                elif square_color == bad_color:
-                    too_far = False
-                elif square_color == color:
-                    too_far = True
-                elif square == "__" and bad_color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color not in squares_in_between:
-                    too_far = False
-                else:
-                    too_far = True
+        
+            # End of Queen Code
 
     elif piece == "b": # bishop
+        # Do some math to findout what are the possible moves using the current_position, and the desired_position
+        distance_x = abs(desired_x - current_x)
+        distance_y = abs(desired_y - current_y)
+
+        if distance_x == distance_y:
+            """If the move is not diagnol from the starting square, then it is illegal"""
+            too_far = False
+        else:
+            too_far = True
+        # End of Bishop Code
+            
+
+
+
         
-        # we use incrementing x and y variables to look at all the possible move cordinates, until the cordinates we are looking at are full.
-        looking_at_x = current_x
-        looking_at_y = current_y
-        squares_in_between = []
-        distance =  abs(desired_y - current_y) # the distance on the x asis should be the same because bishops move in a 45 degree line
-        
 
-
-        if desired_y > current_y and desired_x > current_x:
-            for space_between in range(distance):
-                # If moving down-right
-                looking_at_x += 1 # x increases
-                looking_at_y += 1 # Y increases 
-                
-
-                row = board[looking_at_y - 1]
-                square = row[looking_at_x -1] # getting the square we are currently looking at
-                square_color = list(square)
-                square_color = square_color[0]
-
-                squares_in_between.append(square_color)
-
-
-
-                if looking_at_x != desired_x and looking_at_y != desired_y:
-                    too_far = True
-                #elif looking_at_x == desired_x and looking_at_y == desired_y:
-                elif square == "__" and bad_color not in squares_in_between:
-                    too_far = False
-                elif square_color == bad_color:
-                    too_far = False
-                elif square_color == color:
-                    too_far = True
-                elif square == "__" and bad_color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color not in squares_in_between:
-                    too_far = False
-                else:
-                    too_far = True    
-                    
-
-        elif desired_y < current_y and desired_x < current_x:
-            for space_between in range(distance):
-                # If moving up-left
-                looking_at_x -= 1  # x decreases
-                looking_at_y -= 1 # Y decreases 
-                
-
-                row = board[looking_at_y -1]
-                square = row[looking_at_x -1] # getting the square we are currently looking at
-                square_color = list(square)
-                square_color = square_color[0]
-
-                squares_in_between.append(square_color)
-
-
-                if looking_at_x != desired_x and looking_at_y != desired_y:
-                    too_far = True
-                #elif looking_at_x == desired_x and looking_at_y == desired_y:
-                elif square == "__" and bad_color not in squares_in_between:
-                    too_far = False
-                elif square_color == bad_color:
-                    too_far = False
-                elif square_color == color:
-                    too_far = True
-                elif square == "__" and bad_color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color not in squares_in_between:
-                    too_far = False
-                else:
-                    too_far = True
-                 
-                    
-                    
-                    
-                
-                    
-        elif desired_y > current_y and desired_x < current_x:
-            for space_between in range(distance):    
-                # If moving down-left
-                looking_at_x -= 1 # x decreases
-                looking_at_y += 1 # Y increases 
-                
-
-
-                row = board[looking_at_y -1]
-                square = row[looking_at_x -1] # getting the square we are currently looking at
-                square_color = list(square)
-                square_color = square_color[0]
-
-                squares_in_between.append(square_color)
-
-
-                if looking_at_x != desired_x and looking_at_y != desired_y:
-                    too_far = True
-                #elif looking_at_x == desired_x and looking_at_y == desired_y:
-                elif square == "__" and bad_color not in squares_in_between:
-                    too_far = False
-                elif square_color == bad_color:
-                    too_far = False
-                elif square_color == color:
-                    too_far = True
-                elif square == "__" and bad_color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color not in squares_in_between:
-                    too_far = False
-                else:
-                    too_far = True
-                    
-                    
-                    
-               
-                    
-        elif desired_y < current_y and desired_x > current_x:
-            for space_between in range(distance):
-                # If moving up-right
-                looking_at_x += 1 # x increases
-                looking_at_y -= 1 # Y decreases 
-                
-                """I will have to write a function that pulls what 'looking_at' can see, and then upload it to the controlled squares"""
-
-                row = board[looking_at_y -1]
-                square = row[looking_at_x -1] # getting the square we are currently looking at
-                square_color = list(square)
-                square_color = square_color[0]
-
-                squares_in_between.append(square_color)
-
-
-                if looking_at_x != desired_x and looking_at_y != desired_y:
-                    too_far = True
-                #elif looking_at_x == desired_x and looking_at_y == desired_y:
-                elif square == "__" and bad_color not in squares_in_between:
-                    too_far = False
-                elif square_color == bad_color:
-                    too_far = False
-                elif square_color == color:
-                    too_far = True
-                elif square == "__" and bad_color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color in squares_in_between:
-                    too_far = True
-                elif square == "__" and color not in squares_in_between:
-                    too_far = False
-                else:
-                    too_far = True
-                
-                    
-                    
-                
-                    
 
     return too_far
 
 def allow_move(current_position, desired_move=list, piece=str, board=list):
         # desired_move is the x and y position of which square the mouse clicked after selecting a piece, but it won't go through
         # with moving the piece there if desired_move is occupied by a piece of the current player's own color, or if the piece
-        # intended to be moved is a king and the desired_move is controlled.
-    allowed = True # Default
+        # intended to be moved is a king and the desired_move is controlled the enemy.
+
+    allowed = False # Default
     opposing_color = "pass in value"
 
     parced_piece_str = list(piece)
@@ -816,13 +776,20 @@ def allow_move(current_position, desired_move=list, piece=str, board=list):
 
 
 
-    # Check if we are trying to move a king, if so--then we need to make sure the square isn't controlled by the enemey.
-    its_a_king = parced_piece_str[TARGET_TYPE_INDEX]
+
 
     its_out_of_range = too_far_away(piece, current_position, desired_move, board)
 
-    if its_occupied_by_us or its_out_of_range:
+    if its_out_of_range: # Move will not be allowed if its out of the path of movement of the given piece or if its out of range
         allowed = False
+    elif its_occupied_by_us:
+        allowed = False
+    elif its_out_of_range and its_occupied_by_us:
+        allowed = False
+    elif its_out_of_range == False and its_occupied_by_us == False:
+        allowed = True
+    
+
 
     
 
